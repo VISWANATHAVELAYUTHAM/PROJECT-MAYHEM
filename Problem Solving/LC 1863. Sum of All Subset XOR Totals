@@ -1,0 +1,13 @@
+class Solution {
+    public int subsetXORSum(int[] nums) {
+        return helper(nums,0,0);
+        
+    }
+    private int helper(int [] nums,int index,int currentxor)
+    {
+        if(index==nums.length) return currentxor;
+        int withxor=helper(nums,index+1,currentxor^nums[index]);
+        int withoutxor=helper(nums,index+1,currentxor);
+        return withxor+withoutxor;
+    }
+}
