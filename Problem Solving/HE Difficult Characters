@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class TestClass {
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int T = Integer.parseInt(br.readLine().trim()); // Number of test cases
+        
+        for (int t = 0; t < T; t++) {
+            String s = br.readLine().trim();
+            int[] frequency = new int[26]; // Frequency array for 'a' to 'z'
+            
+            // Count frequency of each letter in the string
+            for (char c : s.toCharArray()) {
+                frequency[c - 'a']++;
+            }
+            
+            // Create a list of characters to sort
+            List<Character> chars = new ArrayList<>();
+            for (char c = 'a'; c <= 'z'; c++) {
+                chars.add(c);
+            }
+            
+            // Sort characters by their frequency, then by ASCII value if frequencies are equal
+            Collections.sort(chars, new Comparator<Character>() {
+                @Override
+                public int compare(Character c1, Character c2) {
+                    int freq1 = frequency[c1 - 'a'];
+                    int freq2 = frequency[c2 - 'a'];
+                    if (freq1 != freq2) {
+                        return Integer.compare(freq1, freq2); // Ascending order of frequency
+                    } else {
+                        return Character.compare(c2, c1); // Descending order of ASCII value
+                    }
+                }
+            });
+            
+            // Build the result string
+            StringBuilder result = new StringBuilder();
+            for (char c : chars) {
+                result.append(c).append(" ");
+            }
+            
+            // Print the result, trimming the trailing space
+            System.out.println(result.toString().trim());
+        }
+        
+        br.close();
+    }
+}
