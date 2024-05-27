@@ -1,0 +1,27 @@
+class Solution {
+
+    public static int longestSubseq(int n, int[] a) {
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        int ans = 1;
+
+        for (int i : a){
+
+            int len = 1;
+
+            if (map.containsKey(i-1)) len = Math.max(len, map.get(i-1)+1);
+
+            if (map.containsKey(i+1)) len = Math.max(len, map.get(i+1)+1);
+
+            map.put(i, len);
+
+            ans = Math.max(ans, len);
+
+        }
+
+        return ans;
+
+    }
+
+}
