@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Solution {
+    static int queensAttack(int n, int k, int r_q, int c_q, int[][] obstacles) {
+        // Initialize variables to count the number of squares attacked by the queen
+        int count = 0;
+
+        // Define directions the queen can move: horizontal, vertical, and diagonal
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+        // Create a set to store obstacles for faster lookup
+        Set<String> obstacleSet = new HashSet<>();
+        for (int[] obstacle : obstacles) {
+            obstacleSet.add(obstacle[0] + "," + obstacle[1]);
+        }
+
+        // Iterate through each direction
+        for (int[] dir : directions) {
+            int x = r_q + dir[0];
+            int y = c_q + dir[1];
+
+            // Move in the current direction until we encounter an obstacle or reach the edge of the board
+            while (x >= 1 && x <= n && y >= 1 && y <= n && !obstacleSet.contains(x + "," + y)) {
+                count++;
+                x += dir[0];
+                y += dir[1];
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read inputs
+        int n = scanner.nextInt();
+        int k = scanner.nextInt();
+        int r_q = scanner.nextInt();
+        int c_q = scanner.nextInt();
+
+        int[][] obstacles = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            obstacles[i][0] = scanner.nextInt();
+            obstacles[i][1] = scanner.nextInt();
+        }
+
+        // Call the queensAttack function and print the result
+        int result = queensAttack(n, k, r_q, c_q, obstacles);
+        System.out.println(result);
+
+        scanner.close();
+    }
+}
