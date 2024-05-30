@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class Solution {
+
+    // Function to check if organizing the containers is possible
+    static String organizingContainers(int[][] container) {
+        int n = container.length;
+        
+        // Array to hold the sum of balls in each container
+        int[] containerCapacity = new int[n];
+        // Array to hold the sum of each type of ball
+        int[] ballTypeCount = new int[n];
+        
+        // Calculate the sums
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                containerCapacity[i] += container[i][j];
+                ballTypeCount[j] += container[i][j];
+            }
+        }
+        
+        // Sort the arrays to compare
+        java.util.Arrays.sort(containerCapacity);
+        java.util.Arrays.sort(ballTypeCount);
+        
+        // Check if both arrays are equal
+        for (int i = 0; i < n; i++) {
+            if (containerCapacity[i] != ballTypeCount[i]) {
+                return "Impossible";
+            }
+        }
+        
+        return "Possible";
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        int q = scanner.nextInt(); // Number of queries
+        
+        for (int i = 0; i < q; i++) {
+            int n = scanner.nextInt(); // Size of the container
+            
+            int[][] container = new int[n][n];
+            
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    container[j][k] = scanner.nextInt();
+                }
+            }
+            
+            String result = organizingContainers(container);
+            System.out.println(result);
+        }
+        
+        scanner.close();
+    }
+}
