@@ -1,0 +1,11 @@
+class Solution {
+    public static int countNumberswith4(int n) {
+        // code here
+        int count=0;
+       for(int i=0;i<=n;i++){
+           String str=Integer.toString(i);
+           if(str.contains("4")) count++;
+       }   
+       return count;
+    }
+}
