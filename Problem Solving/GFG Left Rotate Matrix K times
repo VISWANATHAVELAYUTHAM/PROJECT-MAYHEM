@@ -1,0 +1,23 @@
+class Solution {
+    int[][] rotateMatrix(int k, int mat[][]) {
+        // code here
+        for(int[] arr : mat){
+            rotate(arr, k);
+        }
+        return mat;
+    }
+    private void rotate(int[] arr, int k){
+        k = k%arr.length;
+        reverse(arr, 0, arr.length-1);
+        reverse(arr, 0, arr.length-k-1);
+        reverse(arr, arr.length-k, arr.length-1);
+    }
+    private void reverse(int[] arr, int l, int r){
+        while(l <= r){
+            int temp = arr[l];
+            arr[l] = arr[r];
+            arr[r] = temp;
+            l++;r--;
+        }
+    }
+}
