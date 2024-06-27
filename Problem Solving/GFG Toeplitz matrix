@@ -1,0 +1,24 @@
+class GfG {
+    /*You are required to complete this method*/
+    boolean isToepliz(int mat[][]) {
+           int a=mat[0][0];
+           
+           boolean bool=false;
+      
+        int b=Math.min(mat.length,mat[0].length);
+           for(int i=0;i<b;i++ )
+           {
+                  int j=i;
+                   if(mat[i][j]==a)
+                   {
+                      bool=true; 
+                   }
+                   else
+                   {
+                       return false;
+                   }
+               
+           }
+           return bool;
+    }
+}
