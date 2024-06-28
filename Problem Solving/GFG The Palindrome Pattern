@@ -1,0 +1,28 @@
+public String pattern(int[][] arr) {
+        // Code here
+        for(int r=0; r<arr.length; r++){
+            int s=0, e=arr.length-1;
+            boolean isPalin = true;
+            while(s<e){
+                if(arr[r][s] != arr[r][e]){
+                    isPalin = false;
+                    break;
+                }
+                s++; e--;
+            }
+            if(isPalin) return r+" R";
+        }
+        for(int c=0; c<arr.length; c++){
+            int s=0, e=arr.length-1;
+            boolean isPalin = true;
+            while(s<e){
+                if(arr[s][c] != arr[e][c]){
+                    isPalin = false;
+                    break;
+                }
+                s++; e--;
+            }
+            if(isPalin) return c+" C";
+        }
+        return "-1";
+    }
