@@ -1,0 +1,32 @@
+class GfG {
+// Function to make binary tree from linked list.
+public static Tree convert(Node head, Tree node) {
+if (head == null) return null;
+
+// The root of the tree
+node = new Tree(head.data);
+head = head.next;
+
+// Queue to keep track of nodes whose children need to be added
+Queue<Tree> queue = new LinkedList<>();
+queue.add(node);
+
+// Loop until there are no more nodes in the linked list
+while (head != null) {
+// Parent node
+Tree parent = queue.poll();
+// Left child
+Tree leftChild = new Tree(head.data);
+parent.left = leftChild;
+queue.add(leftChild);
+head = head.next;
+if (head == null) break;
+// Right child
+Tree rightChild = new Tree(head.data);
+parent.right = rightChild;
+queue.add(rightChild);
+head = head.next;
+}
+return node;
+}
+}
