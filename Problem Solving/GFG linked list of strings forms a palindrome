@@ -1,0 +1,11 @@
+class Solution {
+    public boolean compute(Node root) {
+        StringBuilder sb = new StringBuilder();
+        Node temp = root;
+        while(temp != null){
+            sb.append(temp.data);
+            temp = temp.next;
+        }
+        return sb.toString().equals(sb.reverse().toString());
+    }
+}
