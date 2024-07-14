@@ -1,0 +1,43 @@
+class Solution {
+    void segregate0and1(int[] arr) {
+        // code here
+        int n=arr.length;
+        int[] ans=new int[n];
+        int i=0;
+        int j=n-1;
+        //method 1
+        // for(int p=0;p<n;p++){
+        //     if(arr[p]==1 && j>=0){
+        //         ans[j]=1;
+        //         j--;
+        //     }
+        //     else {
+        //         ans[i]=0;
+        //         i++;
+        //     }
+        // }
+        // for(int p=0;p<n;p++){
+        //     arr[p]=ans[p];
+        // }
+        
+        
+        //method 2
+        while(i<j){
+            if(arr[i]==0 && i<j){
+                i++;
+            }
+            if(arr[j]==1 && i<j){
+                j--;
+            }
+            if(arr[i]==1 && arr[j]==0 && i<j){
+                arr[i]=0;
+                arr[j]=1;
+                i++;
+                j--;
+            }
+        }
+    }
+}
+
+
+ 
