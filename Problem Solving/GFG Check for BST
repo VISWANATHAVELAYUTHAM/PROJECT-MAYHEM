@@ -1,0 +1,33 @@
+class Solution {
+    /* 
+    // Function to check whether a Binary Tree is BST or not
+    // it will return an integer array with 3 elements 
+    // first element of array is to check if below tree is BST or not:
+    // if it is: 1 : below tree is BST, else its not.
+    // 2nd and 3rd elements are the leftmost and rightmost elements of below tree respectively
+    */
+    private int[] helper(Node root){
+        if(root == null){
+            return new int[]{1, Integer.MAX_VALUE, Integer.MIN_VALUE};
+        }
+        int[] left = helper(root.left);
+        // if left subtree is BST and its rightmost element is smaller than root
+        if(left[0] == 1 && left[2] < root.data){
+            int[]right = helper(root.right);
+            // if right subtree is a BST and is leftmost element is grater than root
+            //than cirrent tree is BST
+            if(right[0] == 1 && right[1] > root.data){
+                int r = (right[2] == Integer.MIN_VALUE ? root.data : right[2]);
+                int l = (left[1] == Integer.MAX_VALUE ? root.data : left[1]);
+                return new int[]{1, l, r};
+            }
+        }
+        //failure condition
+        return new int[]{0, Integer.MIN_VALUE, Integer.MAX_VALUE};
+    }
+    boolean isBST(Node root) {
+        // code here.
+        int test[] = helper(root);
+        return test[0] == 1;
+    }
+}
