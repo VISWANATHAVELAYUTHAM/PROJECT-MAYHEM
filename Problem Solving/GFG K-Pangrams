@@ -1,0 +1,26 @@
+class Solution {
+    boolean kPangram(String str, int k) {
+        if(str.length()<26){
+            return false;
+        }
+        int[] arr = new int[26];
+        
+        for (char ch : str.toCharArray()) {
+            if (ch >= 'a' && ch <= 'z') {
+                arr[ch - 'a']++;
+            }
+        }
+        
+        int swappable = 0;
+        int missingCount = 0;
+        for (int i = 0; i < 26; i++) {
+            if (arr[i] == 0) {
+                missingCount++;
+            }else{
+                swappable+=arr[i]-1;
+            }
+        }
+        
+        return k >= missingCount && swappable>=missingCount;
+    }
+}
