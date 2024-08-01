@@ -1,0 +1,288 @@
+5. Given a matrix of 2D array of n rows and m coloumns. Print this matrix in ZIG-ZAG fashion as shown in figure.
+ 
+Example:
+Input: 
+1 2 3
+4 5 6
+7 8 9
+Output: 
+1 2 4 7 5 3 6 8 9
+
+
+
+
+
+public class Solution {
+    public static void printZigZag(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        boolean up = true;  // Direction flag, true means going up
+
+        for (int i = 0; i < rows + cols - 1; i++) {
+            if (up) {
+                int x = i < cols ? 0 : i - cols + 1;
+                int y = i < cols ? i : cols - 1;
+                while (x < rows && y >= 0) {
+                    System.out.print(matrix[x][y] + " ");
+                    x++;
+                    y--;
+                }
+            } else {
+                int x = i < rows ? i : rows - 1;
+                int y = i < rows ? 0 : i - rows + 1;
+                while (x >= 0 && y < cols) {
+                    System.out.print(matrix[x][y] + " ");
+                    x--;
+                    y++;
+                }
+            }
+            up = !up;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        printZigZag(matrix);
+    }
+}
+
+
+
+
+
+
+
+Explanation:
+Matrix Dimensions:
+
+The number of rows and columns are determined from the matrix.
+Traversal Direction:
+
+A boolean flag up is used to track the current direction of traversal. Initially, it is set to true, indicating an upward traversal.
+Main Traversal Loop:
+
+The loop runs from 0 to rows + cols - 1, covering all possible diagonals in the matrix.
+Diagonal Traversal:
+
+For each diagonal:
+If up is true, the traversal starts from the appropriate top or right boundary and moves diagonally down-left.
+If up is false, the traversal starts from the appropriate left or bottom boundary and moves diagonally up-right.
+Switching Directions:
+
+After processing each diagonal, the direction flag up is toggled.
+Piece-wise Code Explanation:
+Matrix Dimensions:
+
+java
+Copy code
+int rows = matrix.length;
+int cols = matrix[0].length;
+Determines the number of rows and columns in the matrix.
+Direction Flag:
+
+java
+Copy code
+boolean up = true;  // Direction flag, true means going up
+Initializes the direction flag to indicate the initial traversal direction.
+Main Traversal Loop:
+
+java
+Copy code
+for (int i = 0; i < rows + cols - 1; i++) {
+Loops over each diagonal of the matrix. There are rows + cols - 1 diagonals in total.
+Diagonal Traversal (Upwards):
+
+java
+Copy code
+if (up) {
+    int x = i < cols ? 0 : i - cols + 1;
+    int y = i < cols ? i : cols - 1;
+    while (x < rows && y >= 0) {
+        System.out.print(matrix[x][y] + " ");
+        x++;
+        y--;
+    }
+}
+If the direction is upwards, the starting point is determined based on whether the diagonal index i is within the column count.
+Moves diagonally down-left from the starting point until it goes out of bounds.
+Diagonal Traversal (Downwards):
+
+java
+Copy code
+else {
+    int x = i < rows ? i : rows - 1;
+    int y = i < rows ? 0 : i - rows + 1;
+    while (x >= 0 && y < cols) {
+        System.out.print(matrix[x][y] + " ");
+        x--;
+        y++;
+    }
+}
+If the direction is downwards, the starting point is determined based on whether the diagonal index i is within the row count.
+Moves diagonally up-right from the starting point until it goes out of bounds.
+Switching Directions:
+
+java
+Copy code
+up = !up;
+Toggles the direction flag after processing each diagonal.
+Main Function:
+
+java
+Copy code
+public static void main(String[] args) {
+    int[][] matrix = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+
+    printZigZag(matrix);
+}
+Initializes the matrix and calls the printZigZag function to print the matrix in zig-zag order.
+GIVE EXAMPLE INPUT AND OUTPUT AT LAST
+ChatGPT
+Code:
+java
+Copy code
+public class Solution {
+    public static void printZigZag(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        boolean up = true;  // Direction flag, true means going up
+
+        for (int i = 0; i < rows + cols - 1; i++) {
+            if (up) {
+                int x = i < cols ? 0 : i - cols + 1;
+                int y = i < cols ? i : cols - 1;
+                while (x < rows && y >= 0) {
+                    System.out.print(matrix[x][y] + " ");
+                    x++;
+                    y--;
+                }
+            } else {
+                int x = i < rows ? i : rows - 1;
+                int y = i < rows ? 0 : i - rows + 1;
+                while (x >= 0 && y < cols) {
+                    System.out.print(matrix[x][y] + " ");
+                    x--;
+                    y++;
+                }
+            }
+            up = !up;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        printZigZag(matrix);
+    }
+}
+Explanation:
+Matrix Dimensions:
+
+The number of rows and columns are determined from the matrix.
+Traversal Direction:
+
+A boolean flag up is used to track the current direction of traversal. Initially, it is set to true, indicating an upward traversal.
+Main Traversal Loop:
+
+The loop runs from 0 to rows + cols - 1, covering all possible diagonals in the matrix.
+Diagonal Traversal:
+
+For each diagonal:
+If up is true, the traversal starts from the appropriate top or right boundary and moves diagonally down-left.
+If up is false, the traversal starts from the appropriate left or bottom boundary and moves diagonally up-right.
+Switching Directions:
+
+After processing each diagonal, the direction flag up is toggled.
+Piece-wise Code Explanation:
+Matrix Dimensions:
+
+java
+Copy code
+int rows = matrix.length;
+int cols = matrix[0].length;
+Determines the number of rows and columns in the matrix.
+Direction Flag:
+
+java
+Copy code
+boolean up = true;  // Direction flag, true means going up
+Initializes the direction flag to indicate the initial traversal direction.
+Main Traversal Loop:
+
+java
+Copy code
+for (int i = 0; i < rows + cols - 1; i++) {
+Loops over each diagonal of the matrix. There are rows + cols - 1 diagonals in total.
+Diagonal Traversal (Upwards):
+
+java
+Copy code
+if (up) {
+    int x = i < cols ? 0 : i - cols + 1;
+    int y = i < cols ? i : cols - 1;
+    while (x < rows && y >= 0) {
+        System.out.print(matrix[x][y] + " ");
+        x++;
+        y--;
+    }
+}
+If the direction is upwards, the starting point is determined based on whether the diagonal index i is within the column count.
+Moves diagonally down-left from the starting point until it goes out of bounds.
+Diagonal Traversal (Downwards):
+
+java
+Copy code
+else {
+    int x = i < rows ? i : rows - 1;
+    int y = i < rows ? 0 : i - rows + 1;
+    while (x >= 0 && y < cols) {
+        System.out.print(matrix[x][y] + " ");
+        x--;
+        y++;
+    }
+}
+If the direction is downwards, the starting point is determined based on whether the diagonal index i is within the row count.
+Moves diagonally up-right from the starting point until it goes out of bounds.
+Switching Directions:
+
+java
+Copy code
+up = !up;
+Toggles the direction flag after processing each diagonal.
+Main Function:
+
+java
+Copy code
+public static void main(String[] args) {
+    int[][] matrix = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+
+    printZigZag(matrix);
+}
+Initializes the matrix and calls the printZigZag function to print the matrix in zig-zag order.
+Example Input and Output:
+Input:
+Copy code
+1 2 3
+4 5 6
+7 8 9
+Output:
+Copy code
+1 2 4 7 5 3 6 8 9
+The function processes each diagonal and prints the elements in zig-zag order.
