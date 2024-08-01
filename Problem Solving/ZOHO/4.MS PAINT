@@ -1,0 +1,155 @@
+4. In MS-Paint, when we take the brush to a pixel and click, the color of the region of that pixel is replaced with a new selected color. Following is the problem statement to do this task.
+Given a 2D screen, location of a pixel in the screen and a color, replace color of the given pixel and all adjacent same colored pixels with the given color.
+Example:
+Input:
+       screen[M][N] = {{1, 1, 1, 1, 1, 1, 1, 1},
+                      {1, 1, 1, 1, 1, 1, 0, 0},
+                      {1, 0, 0, 1, 1, 0, 1, 1},
+                      {1, 2, 2, 2, 2, 0, 1, 0},
+                      {1, 1, 1, 2, 2, 0, 1, 0},
+                      {1, 1, 1, 2, 2, 2, 2, 0},
+                      {1, 1, 1, 1, 1, 2, 1, 1},
+                      {1, 1, 1, 1, 1, 2, 2, 1},
+                      };
+    x = 4, y = 4, newColor = 3
+The values in the given 2D screen indicate colors of the pixels.
+x and y are coordinates of the brush, newColor is the color that
+should replace the previous color on screen[x][y] and all surrounding
+pixels with same color.
+
+Output:
+Screen should be changed to following.
+       screen[M][N] = {{1, 1, 1, 1, 1, 1, 1, 1},
+                      {1, 1, 1, 1, 1, 1, 0, 0},
+                      {1, 0, 0, 1, 1, 0, 1, 1},
+                      {1, 3, 3, 3, 3, 0, 1, 0},
+                      {1, 1, 1, 3, 3, 0, 1, 0},
+                      {1, 1, 1, 3, 3, 3, 3, 0},
+                      {1, 1, 1, 1, 1, 3, 1, 1},
+                      {1, 1, 1, 1, 1, 3, 3, 1},
+                      };
+
+
+
+
+
+
+
+ANS:
+
+To implement the functionality similar to the "flood fill" operation in MS Paint, where clicking on a pixel changes the color of the entire connected region of that pixel to a new color, we can use Depth-First Search (DFS) or Breadth-First Search (BFS). Here's how you can achieve this in Java using DFS:
+
+Approach:
+Check Base Case:
+
+If the pixel to be colored is already the new color, return immediately to avoid infinite recursion.
+Flood Fill Using DFS:
+
+Start from the given pixel and recursively apply the new color to all its adjacent pixels that have the same original color.
+Java Code:
+java
+Copy code
+public class Solution {
+    public static void floodFill(int[][] screen, int x, int y, int newColor) {
+        int M = screen.length;
+        int N = screen[0].length;
+        int originalColor = screen[x][y];
+        
+        // If the color to change is the same as newColor, do nothing
+        if (originalColor == newColor) return;
+        
+        // Start the flood fill process
+        floodFillDFS(screen, x, y, originalColor, newColor, M, N);
+    }
+    
+    private static void floodFillDFS(int[][] screen, int x, int y, int originalColor, int newColor, int M, int N) {
+        // Base case: if out of bounds or current pixel is not the original color
+        if (x < 0 || x >= M || y < 0 || y >= N || screen[x][y] != originalColor) {
+            return;
+        }
+        
+        // Set the new color
+        screen[x][y] = newColor;
+        
+        // Recursive calls for all 4 directions
+        floodFillDFS(screen, x + 1, y, originalColor, newColor, M, N); // Down
+        floodFillDFS(screen, x - 1, y, originalColor, newColor, M, N); // Up
+        floodFillDFS(screen, x, y + 1, originalColor, newColor, M, N); // Right
+        floodFillDFS(screen, x, y - 1, originalColor, newColor, M, N); // Left
+    }
+    
+    public static void main(String[] args) {
+        int[][] screen = {
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 0, 0},
+            {1, 0, 0, 1, 1, 0, 1, 1},
+            {1, 2, 2, 2, 2, 0, 1, 0},
+            {1, 1, 1, 2, 2, 0, 1, 0},
+            {1, 1, 1, 2, 2, 2, 2, 0},
+            {1, 1, 1, 1, 1, 2, 1, 1},
+            {1, 1, 1, 1, 1, 2, 2, 1}
+        };
+        int x = 4, y = 4, newColor = 3;
+        
+        floodFill(screen, x, y, newColor);
+        
+        // Print the modified screen
+        for (int[] row : screen) {
+            for (int pixel : row) {
+                System.out.print(pixel + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+Explanation:
+Initial Check:
+
+java
+Copy code
+if (originalColor == newColor) return;
+If the original color of the pixel is the same as the new color, there's nothing to change, so we return immediately.
+DFS Implementation:
+
+java
+Copy code
+private static void floodFillDFS(int[][] screen, int x, int y, int originalColor, int newColor, int M, int N) {
+    if (x < 0 || x >= M || y < 0 || y >= N || screen[x][y] != originalColor) {
+        return;
+    }
+    screen[x][y] = newColor;
+    floodFillDFS(screen, x + 1, y, originalColor, newColor, M, N);
+    floodFillDFS(screen, x - 1, y, originalColor, newColor, M, N);
+    floodFillDFS(screen, x, y + 1, originalColor, newColor, M, N);
+    floodFillDFS(screen, x, y - 1, originalColor, newColor, M, N);
+}
+This function performs the DFS to change the color of the connected region recursively.
+It first checks if the current pixel is within bounds and has the original color.
+If so, it changes the pixel's color to the new color and then recursively calls itself for the four adjacent pixels (up, down, left, right).
+Main Function:
+
+java
+Copy code
+public static void main(String[] args) {
+    int[][] screen = {
+        ...
+    };
+    int x = 4, y = 4, newColor = 3;
+    floodFill(screen, x, y, newColor);
+    ...
+}
+The main function sets up the initial screen, the coordinates, and the new color, then calls the floodFill function.
+It prints the modified screen to verify the result.
+Output:
+Given the input screen and the parameters, the output will be:
+
+Copy code
+1 1 1 1 1 1 1 1 
+1 1 1 1 1 1 0 0 
+1 0 0 1 1 0 1 1 
+1 3 3 3 3 0 1 0 
+1 1 1 3 3 0 1 0 
+1 1 1 3 3 3 3 0 
+1 1 1 1 1 3 1 1 
+1 1 1 1 1 3 3 1 
+This approach ensures that all connected regions of the same color are changed efficiently.
