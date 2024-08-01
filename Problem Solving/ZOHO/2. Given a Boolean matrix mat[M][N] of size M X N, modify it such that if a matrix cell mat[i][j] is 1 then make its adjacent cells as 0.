@@ -1,0 +1,59 @@
+2. Given a Boolean matrix mat[M][N] of size M X N, modify it such that if a matrix cell mat[i][j] is 1 then make its adjacent cells as 0.
+
+
+
+
+class Solution {
+    static void modifyMatrix(int[][] mat) {
+        int M = mat.length;
+        int N = mat[0].length;
+        
+        // Create a temporary matrix to store the modified values
+        int[][] temp = new int[M][N];
+        
+        // Copy the original matrix to the temporary matrix
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                temp[i][j] = mat[i][j];
+            }
+        }
+
+        // Traverse the matrix to identify cells to be set to 0
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                if (mat[i][j] == 1) {
+                    // Set adjacent cells to 0
+                    if (i > 0) temp[i - 1][j] = 0; // Up
+                    if (i < M - 1) temp[i + 1][j] = 0; // Down
+                    if (j > 0) temp[i][j - 1] = 0; // Left
+                    if (j < N - 1) temp[i][j + 1] = 0; // Right
+                }
+            }
+        }
+
+        // Copy the modified values from the temporary matrix back to the original matrix
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                mat[i][j] = temp[i][j];
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[][] mat = {
+            {0, 1, 0},
+            {0, 0, 1},
+            {1, 0, 0}
+        };
+
+        modifyMatrix(mat);
+
+        // Print the modified matrix
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
