@@ -1,0 +1,83 @@
+Sure, let's break down the simplified code part by part.
+
+### Main Function: `wordBreak`
+
+```java
+public static int wordBreak(int n, String s, ArrayList<String> dictionary) {
+    return wordBreakHelper(s, dictionary, new HashMap<>()) ? 1 : 0;
+}
+```
+
+- **Parameters**:
+  - `n`: The length of the string `s`.
+  - `s`: The input string to be segmented.
+  - `dictionary`: A list of words that form the dictionary.
+
+- **Purpose**: Calls the helper function `wordBreakHelper` to determine if the string `s` can be segmented into a sequence of dictionary words.
+- **Return**: Converts the boolean result from `wordBreakHelper` to `1` (if true) or `0` (if false).
+
+### Helper Function: `wordBreakHelper`
+
+```java
+private static boolean wordBreakHelper(String s, ArrayList<String> dictionary, HashMap<String, Boolean> memo) {
+    if (s.isEmpty()) return true;
+    if (memo.containsKey(s)) return memo.get(s);
+
+    for (int i = 1; i <= s.length(); i++) {
+        if (dictionary.contains(s.substring(0, i)) && wordBreakHelper(s.substring(i), dictionary, memo)) {
+            memo.put(s, true);
+            return true;
+        }
+    }
+
+    memo.put(s, false);
+    return false;
+}
+```
+
+#### 1. Base Case
+
+```java
+if (s.isEmpty()) return true;
+```
+- **Purpose**: If the string `s` is empty, it means we have successfully segmented the entire string, so return `true`.
+
+#### 2. Memoization Check
+
+```java
+if (memo.containsKey(s)) return memo.get(s);
+```
+- **Purpose**: Check if the result for the current string `s` is already computed and stored in the `memo` map. If so, return the stored result to avoid redundant computation.
+
+#### 3. Loop through Possible Splits
+
+```java
+for (int i = 1; i <= s.length(); i++) {
+    if (dictionary.contains(s.substring(0, i)) && wordBreakHelper(s.substring(i), dictionary, memo)) {
+        memo.put(s, true);
+        return true;
+    }
+}
+```
+- **Purpose**: Iterate through the string `s`, trying to split it at each position `i`.
+  - `s.substring(0, i)`: The left part of the string from the beginning to position `i`.
+  - `dictionary.contains(s.substring(0, i))`: Check if the left part is in the dictionary.
+  - `wordBreakHelper(s.substring(i), dictionary, memo)`: Recursively check if the right part (from position `i` to the end) can be segmented.
+
+- **If both conditions are true**:
+  - Store `true` in the memoization map for the current string `s` (indicating it can be segmented).
+  - Return `true`.
+
+#### 4. Store and Return Result
+
+```java
+memo.put(s, false);
+return false;
+```
+- **Purpose**: If no valid segmentation is found, store `false` in the memoization map for the current string `s` and return `false`.
+
+### Summary
+
+- The `wordBreak` function initiates the process by calling the `wordBreakHelper` function.
+- The `wordBreakHelper` function uses a recursive approach with memoization to determine if the string `s` can be segmented into dictionary words.
+- It checks all possible splits of the string, storing results in a memoization map to optimize performance by avoiding redundant computations.
