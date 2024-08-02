@@ -1,0 +1,98 @@
+Certainly! Let's break down the function `sortByFreq` step-by-step:
+
+### Function Purpose
+The function `sortByFreq` sorts the elements of an array based on the frequency of each element in descending order. If two elements have the same frequency, they are sorted by their value in ascending order.
+
+### Step-by-Step Explanation
+
+1. **Initialize a HashMap to Count Frequencies**:
+   ```java
+   HashMap<Integer, Integer> map = new HashMap<>();
+   for (int i : arr) map.put(i, map.getOrDefault(i, 0) + 1);
+   ```
+   - `HashMap<Integer, Integer> map` is used to store each element (`i`) of the array as the key and its frequency as the value.
+   - `map.getOrDefault(i, 0)` fetches the current frequency of `i` from the map. If `i` is not in the map, it returns 0.
+   - `map.put(i, map.getOrDefault(i, 0) + 1)` increments the frequency count of `i` by 1.
+
+2. **Create a List of Keys for Sorting**:
+   ```java
+   ArrayList<Integer> list = new ArrayList<>(map.keySet());
+   ```
+   - `ArrayList<Integer> list` is created to store the unique elements (keys) from the map.
+
+3. **Sort the List Based on Frequencies and Values**:
+   ```java
+   Collections.sort(list, (a, b) -> {
+       if (map.get(b) == map.get(a)) return a - b;
+       else return map.get(b) - map.get(a);
+   });
+   ```
+   - `Collections.sort` sorts the list using a custom comparator.
+   - The comparator checks:
+     - If the frequency of element `b` (`map.get(b)`) is equal to the frequency of element `a` (`map.get(a)`), it returns `a - b`. This sorts the elements with the same frequency in ascending order of their values.
+     - If the frequencies are different, it returns `map.get(b) - map.get(a)`. This sorts the elements in descending order of their frequencies.
+
+4. **Create the Sorted Result List**:
+   ```java
+   ArrayList<Integer> ans = new ArrayList<>();
+   for (int i : list) {
+       while (map.get(i) != 0) {
+           ans.add(i);
+           map.put(i, map.getOrDefault(i, 0) - 1);
+       }
+   }
+   ```
+   - `ArrayList<Integer> ans` is created to store the final sorted result.
+   - For each element `i` in the sorted list `list`, the code adds `i` to `ans` as many times as its frequency (`map.get(i)`) indicates.
+   - `map.put(i, map.getOrDefault(i, 0) - 1)` decrements the frequency of `i` by 1 each time it is added to `ans`.
+
+5. **Return the Result**:
+   ```java
+   return ans;
+   ```
+   - Finally, the sorted list `ans` is returned.
+
+### Example Execution
+
+Given an array `arr = {5, 5, 4, 6, 4, 5}`, the steps would be:
+1. Count frequencies using the map: `{5=3, 4=2, 6=1}`.
+2. Create the list of keys: `[5, 4, 6]`.
+3. Sort the list based on frequencies and values: `[5, 4, 6]`.
+4. Create the result list by repeating elements based on their frequencies: `[5, 5, 5, 4, 4, 6]`.
+
+### Full Code
+Here is the full code for the `sortByFreq` function:
+
+```java
+import java.util.*;
+
+class Solution {
+    // Function to sort the array according to frequency of elements.
+    static ArrayList<Integer> sortByFreq(int arr[], int n) {
+        // Create a frequency map
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i : arr) map.put(i, map.getOrDefault(i, 0) + 1);
+
+        // Create a list of keys (unique elements)
+        ArrayList<Integer> list = new ArrayList<>(map.keySet());
+
+        // Sort the list based on the frequency and then by value
+        Collections.sort(list, (a, b) -> {
+            if (map.get(b).equals(map.get(a))) return a - b;
+            else return map.get(b) - map.get(a);
+        });
+
+        // Create the result list based on sorted frequencies
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i : list) {
+            while (map.get(i) != 0) {
+                ans.add(i);
+                map.put(i, map.getOrDefault(i, 0) - 1);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+This function efficiently sorts the array based on the frequency of elements, providing a clear and easy-to-understand approach.
