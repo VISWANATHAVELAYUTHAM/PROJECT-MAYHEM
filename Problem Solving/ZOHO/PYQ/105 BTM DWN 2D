@@ -1,0 +1,84 @@
+105) Given a 2D grid of characters, you have to search for all the words in a dictionary by
+moving only along two directions, either right or down. Print the word if it occurs.
+ 
+Sample :         
+  a   z  o   l 
+  n   x  h   o
+  v   y   i   v 
+  o   r   s  e 
+ Dictionary = {van, zoho, love, are, is} 
+ 
+ Output: 
+    zoho 
+    love 
+    Is 
+    
+    
+    
+    
+    
+    import java.util.HashSet;
+import java.util.Set;
+
+public class Solution {
+    public static void main(String[] args) {
+        char[][] grid = {
+            {'a', 'z', 'o', 'l'},
+            {'n', 'x', 'h', 'o'},
+            {'v', 'y', 'i', 'v'},
+            {'o', 'r', 's', 'e'}
+        };
+        
+        Set<String> dictionary = new HashSet<>();
+        dictionary.add("van");
+        dictionary.add("zoho");
+        dictionary.add("love");
+        dictionary.add("are");
+        dictionary.add("is");
+
+        findWords(grid, dictionary);
+    }
+
+    public static void findWords(char[][] grid, Set<String> dictionary) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        for (String word : dictionary) {
+            boolean found = false;
+            for (int r = 0; r < rows && !found; r++) {
+                for (int c = 0; c < cols && !found; c++) {
+                    if (canFindWord(grid, word, r, c)) {
+                        System.out.println(word);
+                        found = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean canFindWord(char[][] grid, String word, int r, int c) {
+        int len = word.length();
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        // Check horizontally to the right
+        if (c + len <= cols) {
+            int i;
+            for (i = 0; i < len; i++) {
+                if (grid[r][c + i] != word.charAt(i)) break;
+            }
+            if (i == len) return true;
+        }
+
+        // Check vertically downwards
+        if (r + len <= rows) {
+            int i;
+            for (i = 0; i < len; i++) {
+                if (grid[r + i][c] != word.charAt(i)) break;
+            }
+            if (i == len) return true;
+        }
+
+        return false;
+    }
+}
