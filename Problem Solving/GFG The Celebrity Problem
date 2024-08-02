@@ -1,0 +1,15 @@
+class Solution {
+    // Function to find if there is a celebrity in the party or not.
+    public int celebrity(int mat[][]) {
+        // code here
+        for(int i=0;i<mat.length;i++){
+            int row=0,col=0;
+            for(int j=0;j<mat[0].length;j++){
+                if(mat[i][j]==0)row++;
+                if(mat[j][i]==1)col++;
+            }
+            if(row==mat.length && col==mat.length-1)return i;
+        }
+        return -1;
+    }
+}
