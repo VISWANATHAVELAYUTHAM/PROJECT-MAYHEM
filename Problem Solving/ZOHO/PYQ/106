@@ -1,0 +1,40 @@
+106) Given a string, change the order of words in the string (last string should come first).
+Should use RECURSION
+  
+Sample:   one two three 
+Output :  three two one 
+
+
+
+
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a string:");
+        String input = scanner.nextLine();
+        
+        String result = reverseWords(input);
+        System.out.println(result);
+        
+        scanner.close();
+    }
+
+    public static String reverseWords(String s) {
+        // Base case: if there is no space in the string, return it as it is
+        if (!s.contains(" ")) {
+            return s;
+        }
+        
+        // Find the first space to separate the first word and the rest of the string
+        int spaceIndex = s.indexOf(" ");
+        // First word
+        String firstWord = s.substring(0, spaceIndex);
+        // Remaining string
+        String remainingString = s.substring(spaceIndex + 1);
+        
+        // Recursively reverse the remaining string and append the first word at the end
+        return reverseWords(remainingString) + " " + firstWord;
+    }
+}
