@@ -1,0 +1,35 @@
+public class Solution {
+    104) Given a string, we have to reverse the string without changing the position of punctuations and spaces.
+ 
+Sample:   house no : 123@ cbe 
+Output:    ebc32 1o :  nes@ uoh 
+
+
+
+public static void main(String[] args) {
+        String input = "house no : 123@ cbe";
+        String output = reverseStringWithPunctuation(input);
+        System.out.println(output);
+    }
+
+    public static String reverseStringWithPunctuation(String s) {
+        char[] chars = s.toCharArray();
+        int left = 0, right = chars.length - 1;
+
+        while (left < right) {
+            if (!Character.isLetterOrDigit(chars[left])) {
+                left++;
+            } else if (!Character.isLetterOrDigit(chars[right])) {
+                right--;
+            } else {
+                char temp = chars[left];
+                chars[left] = chars[right];
+                chars[right] = temp;
+                left++;
+                right--;
+            }
+        }
+
+        return new String(chars);
+    }
+}
