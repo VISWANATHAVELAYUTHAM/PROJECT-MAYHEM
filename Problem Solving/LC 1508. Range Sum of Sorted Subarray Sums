@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class Solution {
+    public int rangeSum(int[] nums, int n, int left, int right) {
+        ArrayList<Long> list = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            long sum = nums[i];
+            list.add(sum);
+            for (int j = i + 1; j < n; j++) {
+                sum += nums[j];
+                list.add(sum);
+            }
+        }
+        
+        long[] arr = new long[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            arr[i] = list.get(i);
+        }
+        
+        Arrays.sort(arr);
+        
+        long ans = 0;
+        for (int i = left - 1; i < right; i++) {
+            ans += arr[i];
+            ans %= 1000000007; // To handle large sums, take modulo as we go
+        }
+        
+        return (int) ans; // Return the result as an int
+    }
+}
