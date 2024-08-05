@@ -1,0 +1,21 @@
+class Solution {
+    public String kthDistinct(String[] arr, int k) {
+        Map<String, Integer> map = new HashMap<>();
+        for (String n : arr) {
+            map.put(n, map.getOrDefault(n, 0) + 1);
+        }
+
+        List<String> distinctElements = new ArrayList<>();
+        for (String n : arr) {
+            if (map.get(n) == 1) {
+                distinctElements.add(n);
+            }
+        }
+
+        if (distinctElements.size() < k) {
+            return "";
+        }
+
+        return distinctElements.get(k - 1);
+    }
+}
