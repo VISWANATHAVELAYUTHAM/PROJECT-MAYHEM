@@ -1,0 +1,11 @@
+class Solution {
+    public int kthElement(int k, int[] arr1, int[] arr2) {
+        int[] arr3 = new int[arr1.length + arr2.length];
+        System.arraycopy(arr1, 0, arr3, 0, arr1.length);
+        System.arraycopy(arr2, 0, arr3, arr1.length, arr2.length);
+
+        Arrays.sort(arr3);
+
+        return arr3[k - 1];
+    }
+}
