@@ -1,0 +1,21 @@
+class Solution {
+
+    int Maximize(int arr[]) {
+        // Complete the function
+        
+        Arrays.sort(arr);  //sorting the array
+        
+        int n = arr.length; //len of the arr
+        long sum = 0;
+        
+        for(int i = 0; i < n; i++){
+            
+            long temp = (long)arr[i]*i;  //multiplying with the index
+            
+            sum += temp;   //adding the multiplied elements
+            
+        }
+        
+        return (int) (sum % 1000000007);  // to conert long values to int
+    }
+}
