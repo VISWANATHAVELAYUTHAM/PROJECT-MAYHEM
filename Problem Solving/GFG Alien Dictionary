@@ -1,0 +1,48 @@
+class Solution {
+    public String findOrder(String[] dict, int n, int k) {
+        // Write your code here
+        Map<Character,List<Character>>graph=new  HashMap<>();
+        for(int i=0;i<dict.length-1;i++){
+             String s1=dict[i];
+             String s2=dict[i+1];
+             int j=0;
+             int len=Math.min(s1.length(),s2.length());
+             while(j<len&&s1.charAt(j)==s2.charAt(j))
+                j++;
+            
+             if(j==len)
+               continue;
+             
+             char ch1=s1.charAt(j);
+             char ch2=s2.charAt(j);
+             if(!graph.containsKey(ch1))
+               graph.put(ch1,new ArrayList<Character>());
+             graph.get(ch1).add(ch2);    
+        }
+        int []degree=new int[k];
+        for(char i:graph.keySet())
+           for(char j:graph.get(i))
+              degree[j-'a']++;
+        
+        String ans="";
+        Queue<Character>queue=new LinkedList<>();
+        for(int i=0;i<k;i++){
+            if(degree[i]==0)
+              queue.add((char)(i+'a'));
+        }
+        while(!queue.isEmpty()){
+            char ch=queue.poll();
+            ans+=ch;
+            if(graph.containsKey(ch)){
+                for(char j:graph.get(ch)){
+                    degree[j-'a']--;
+                    if(degree[j-'a']==0)
+                       queue.add(j);
+                }
+            }
+        }
+        
+        return ans.length()!=k?"":ans;
+    }
+}
+
