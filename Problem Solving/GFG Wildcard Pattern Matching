@@ -1,0 +1,41 @@
+class Solution {
+    public int wildCard(String pattern, String str) {
+        int n = pattern.length();
+        int m = str.length();
+        
+        // Create a DP table
+        boolean[][] dp = new boolean[n + 1][m + 1];
+        
+        // Empty pattern and empty string match
+        dp[0][0] = true;
+
+        // Fill the first row for patterns with '*'
+        for (int j = 1; j <= m; j++) {
+            dp[0][j] = false; // No pattern can match a non-empty string
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            if (pattern.charAt(i - 1) == '*') {
+                dp[i][0] = dp[i - 1][0]; // '*' can match empty sequence
+            } else {
+                dp[i][0] = false; // Non-empty pattern cannot match empty string
+            }
+        }
+
+        // Fill the DP table
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                char pChar = pattern.charAt(i - 1);
+                char sChar = str.charAt(j - 1);
+                
+                if (pChar == sChar || pChar == '?') {
+                    dp[i][j] = dp[i - 1][j - 1]; // Characters match
+                } else if (pChar == '*') {
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1]; // '*' matches empty or one more character
+                }
+            }
+        }
+        
+        return dp[n][m] ? 1 : 0; // Return 1 if pattern matches, otherwise 0
+    }
+}
