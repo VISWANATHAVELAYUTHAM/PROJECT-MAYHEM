@@ -1,0 +1,35 @@
+class Solution {
+    // Function to sort the array according to frequency of elements.
+    public ArrayList<Integer> sortByFreq(int arr[]) {
+        // add your code here
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int a : arr){
+            map.put(a, map.getOrDefault(a, 0)+1);
+        }
+        
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        for(Map.Entry<Integer, Integer> entry : sortByValueThenKey(map)){
+            int val = entry.getValue();
+            while(val-- > 0){
+                ans.add(entry.getKey());
+            }
+        }
+        
+        return ans;
+    }
+    
+    public List<Map.Entry<Integer, Integer>> sortByValueThenKey(Map<Integer, Integer> map) {
+        List<Map.Entry<Integer, Integer>> entries = new ArrayList<>(map.entrySet());
+        Collections.sort(entries, (e1, e2) -> {
+            int valueComparison = e2.getValue().compareTo(e1.getValue());
+            if (valueComparison != 0) {
+                return valueComparison;
+            } else {
+                return e1.getKey().compareTo(e2.getKey());
+            }
+        });
+        return entries;
+    }
+    
+}
