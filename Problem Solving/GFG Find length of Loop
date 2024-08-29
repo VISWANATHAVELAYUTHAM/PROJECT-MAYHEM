@@ -1,0 +1,42 @@
+class Solution {
+    /**
+     * Finds the length of a loop in the linked list.
+     *
+     * @param head The head of the linked list.
+     * @return The length of the loop (0 if no loop exists).
+     */
+    public int countNodesinLoop(Node head) {
+        // Base case: If the list is empty or has only one node, there can't be a loop.
+        if (head == null || head.next == null) {
+            return 0;
+        }
+        
+        Node fast = head; // Fast pointer moves 2 steps at a time.
+        Node slow = head; // Slow pointer moves 1 step at a time.
+        boolean loop = false; // Flag to track if a loop is detected.
+        
+        // Detect loop using Floyd's cycle detection algorithm.
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                loop = true;
+                break;
+            }
+        }
+        
+        if (!loop) {
+            return 0; // No loop found.
+        }
+        
+        // Count the nodes in the loop.
+        int count = 1;
+        fast = fast.next; // Move fast pointer one step ahead.
+        while (slow != fast) {
+            count++;
+            fast = fast.next;
+        }
+        
+        return count;
+    }
+}
