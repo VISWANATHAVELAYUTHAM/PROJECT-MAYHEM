@@ -1,0 +1,27 @@
+ public long minCost(long[] ropes) {
+        // code here
+        
+        /*
+        
+        */
+        
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+        
+        for(long ropeLength: ropes){
+            pq.offer(ropeLength);
+        }
+        
+        long minimumCost = 0;
+        
+        while(!pq.isEmpty() && pq.size() > 1){
+            long firstShortRope = pq.poll();
+            long secondShortRope = pq.poll();
+            
+            long sumOfTwoRopes = firstShortRope + secondShortRope;
+            
+            minimumCost += sumOfTwoRopes; 
+            
+            pq.offer(sumOfTwoRopes);
+        }
+        return minimumCost;
+    }
