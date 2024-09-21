@@ -1,0 +1,20 @@
+class Solution {
+    // Function to clone a linked list with next and random pointer.
+    Node copyList(Node head) {
+        // your code here
+        Map<Node,Node> map=new HashMap<>();
+        Node temp=head;
+        while(temp!=null){
+            map.put(temp,new Node(temp.data));
+            temp=temp.next;
+        }
+        map.put(null,null);
+        temp=head;
+        while(temp!=null){
+            map.get(temp).next=map.get(temp.next);
+            map.get(temp).random=map.get(temp.random);
+            temp=temp.next;
+        }
+        return map.get(head);
+    }
+}
