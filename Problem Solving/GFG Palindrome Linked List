@@ -1,0 +1,34 @@
+class Solution {
+    // Function to check whether the list is palindrome.
+    boolean isPalindrome(Node head) {
+        // Your code here
+        if (head == null || head.next == null) {
+            return true; // Empty or single element list is a palindrome
+        }
+        
+        Stack<Integer> stack = new Stack<>();
+        Node slow = head, fast = head;
+        
+        // Push first half of elements onto the stack
+        while (fast != null && fast.next != null) {
+            stack.push(slow.data);
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        // If the list has an odd number of elements, skip the middle one
+        if (fast != null) {
+            slow = slow.next;
+        }
+        
+        // Compare second half of the list with elements popped from the stack
+        while (slow != null) {
+            if (slow.data != stack.pop()) {
+                return false;  // Mismatch found, not a palindrome
+            }
+            slow = slow.next;
+        }
+        
+        return true;  // All elements matched, it's a palindrome
+    }
+}
