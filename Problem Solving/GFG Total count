@@ -1,0 +1,13 @@
+class Solution {
+    int totalCount(int k, int[] arr) {
+
+        int ans = 0; //declaree an element that we will keep updatin our count in and at the end will return it 
+
+
+        for(int i = 0 ; i< arr.length ; i++) // for loop to iterate over every element
+        {
+            ans += (arr[i]%k==0)? (arr[i]/k) : (arr[i]/k)+1;         // to minimize the number of elements we will try to use the biggest element and the biggest element is none other k, so we will check if remainder is 0 we can use n count of k to reach the number as it will be the minimum number of count, and if it is not then it will be less than k and it will simply use one more element
+        }
+        return ans; // return your answer
+    }
+}
