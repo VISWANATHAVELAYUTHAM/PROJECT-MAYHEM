@@ -1,0 +1,23 @@
+class Solution {
+    // Function to find the majority elements in the array
+    public List<Integer> findMajority(List<Integer> nums) {
+        // Your code goes here.
+        ArrayList<Integer> li = new ArrayList<>();
+        HashMap<Integer,Integer> mp = new HashMap<>();
+        for(int i=0;i<nums.size();i++){
+            if(!mp.containsKey(nums.get(i))){
+                mp.put(nums.get(i),1);
+            }
+            else{
+                mp.put(nums.get(i),mp.get(nums.get(i))+1);
+            }
+        }
+        for(int i=0;i<nums.size();i++){
+            if(mp.get(nums.get(i)) > nums.size()/3){
+                if(!li.contains(nums.get(i))) li.add(nums.get(i));
+            }
+        }
+        if(li.isEmpty()) li.add(-1);
+        return li;
+    }
+}
