@@ -1,0 +1,18 @@
+class Solution {
+    public int pairWithMaxSum(int[] arr) {
+        // code here
+       int n = arr.length;
+       
+       if(n==1) return -1;
+       
+       int sum = 0;
+       int max = Integer.MIN_VALUE;
+       for(int i = 1; i<n; i++){
+           sum = arr[i] + arr[i-1];
+           max = Math.max(max,sum);
+       }
+       
+       return max;
+       
+    }
+}
