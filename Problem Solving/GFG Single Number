@@ -1,0 +1,20 @@
+
+class Solution {
+   int getSingle(int arr[]) {
+        // code here
+        int n = arr.length;
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        
+        for(int i=0; i<n; i++){
+            hm.put(arr[i], hm.getOrDefault(arr[i], 0) + 1);
+        }
+        
+        for(Integer key : hm.keySet()){
+            if(hm.get(key) % 2 != 0) return key;
+        }
+        
+        return -1;
+    }
+
+
+}
