@@ -1,0 +1,30 @@
+class Solution {
+
+    String roundToNearest(String str) {
+        // Complete the function
+        int n = str.length();
+        //if str has only one digit
+        if(n<2){
+            int y = Integer.parseInt(str);
+            return y>5? "10" : "0";
+        }
+        
+        //if unit digit is less than equal to 5 i.e. 24->20 
+        if(str.charAt(n-1)<='5'){
+            return str.substring(0,n-1)+"0";
+        }
+        
+        //if unit digit is greater than 5 i.e. 246->250
+        String sb = "0";
+        for(int i=str.length()-2;i>=0;i--){
+            int x = (int)(str.charAt(i)-'0');
+            
+            //if it is  9 then update to 0 else add 1
+            if(x != 9){
+                return str.substring(0, i)+(x+1)+sb;
+            }
+            sb = "0"+sb;
+        }
+        return "1"+sb;
+    }
+}
