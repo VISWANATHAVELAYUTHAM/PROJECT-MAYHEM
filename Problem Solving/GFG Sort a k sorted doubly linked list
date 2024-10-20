@@ -1,0 +1,36 @@
+class Solution {
+    public DLLNode sortAKSortedDLL(DLLNode head, int k) {
+        // Code here
+       if(head == null) return head;
+       PriorityQueue<DLLNode> queue = new PriorityQueue<DLLNode>((a,b) -> a.data - b.data);
+       int i =0;
+       while(i<=k&&head!=null) {
+           queue.add(head);
+           head = head.next;
+           i++;
+       }
+       DLLNode newhead = null;
+       DLLNode curr = null;
+       while(!queue.isEmpty()){
+            if(newhead == null){
+                newhead = queue.poll();
+                newhead.prev = null;
+                curr = newhead;
+            }
+            else{
+                curr.next = queue.poll();
+                curr.next.prev = curr;
+                curr = curr.next;
+            }
+            if(head!=null){
+                queue.add(head);
+                head = head.next;
+            }
+       }
+       curr.next = null;
+       return  newhead;
+
+    }
+}
+
+ 
