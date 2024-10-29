@@ -1,0 +1,40 @@
+class GfG {
+    static Node getTail(Node head) {
+        Node curr = head;
+        while(curr != null && curr.next != null)
+            curr = curr.next;
+        return curr;
+    }
+    static void sort(Node head,Node tail) {
+        if(head == null || head == tail) return;
+        Node pivot = partion(head,tail);
+        sort(head,pivot);
+        sort(pivot.next,tail);
+    }
+    static void swap(Node node1,Node node2) {
+        int temp = node1.data;
+        node1.data = node2.data;
+        node2.data = temp;
+    }
+    static Node partion(Node head,Node tail) {
+        Node pivot = head;
+        Node pre = head;
+        Node curr = head;
+        
+        while(curr != tail.next) {
+            if(curr.data < pivot.data) {
+                swap(curr,pre.next);
+                pre = pre.next;
+            }
+            curr = curr.next;
+        }
+        
+        swap(pre,pivot);
+        return pre;
+    }
+    public static Node quickSort(Node node) {
+        Node tail = getTail(node);
+        sort(node,tail);
+        return node;
+    }
+}
