@@ -1,0 +1,33 @@
+class Solution {
+    public long maxSum(Long[] arr) {
+       Arrays.sort(arr); 
+        int right = arr.length - 1;
+        long ans[] = new long[arr.length];
+        ans[0] = arr[0]; 
+        int n = arr.length;
+        int xt = 1;
+        for(int i = 1; i < n; i++) {
+            if(i % 2 != 0) {
+                ans[i] = arr[right]; 
+                right--;
+            }else{
+                ans[i] = arr[i-xt];
+                xt = xt+1;
+            }    
+        }
+
+  
+        int count = 1;
+        int slow = 0;
+        int fast = 1; long sum = 0;
+        while(count!=arr.length){
+            sum+=Math.abs(ans[slow]-ans[fast]);
+            slow++;
+            fast++;
+            count = count+1;
+        }
+        sum+=Math.abs(ans[n-1]-ans[0]);
+        return sum;
+
+    }
+}
