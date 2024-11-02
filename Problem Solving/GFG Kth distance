@@ -1,0 +1,51 @@
+class Solution {
+    public boolean checkDuplicatesWithinK(int[] arr, int k) {
+        // Better Approach : Using sliding window approach:
+        
+        
+        int i=0;
+        int j=0;
+        int n = arr.length;
+        
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        while(j<n){
+            map.put(arr[j], map.getOrDefault(arr[j],0)+1);
+            // if map size is equal to length of current subarray, that means, there is no duplicate
+            // in current subarray, so keep increasing right(j) pointer,
+            if(map.size() == j-i+1){
+                j++;
+                
+            }
+            
+            // if we get any repeating number, then check for your condition.
+            else{
+                // since we have to find the duplicate in k size window, so keep increasing the 
+                // left pointer(i), and decrease the frequency of value at ith index.
+                while(map.size() > k){
+                    if(map.containsKey(arr[i])){
+                        map.put(arr[i],map.getOrDefault(arr[i],0)-1);
+                    }
+                    
+                    // if frequency of value at ith index has become 0, then remove it.
+                    if(map.get(arr[i]) == 0){
+                        map.remove(arr[i]);
+                    }
+                    i++;
+                }
+                
+                // if map size < current subarray length( means there is any duplicate element in current window
+                // and  window is <= k, then return true.
+                if((map.size() < j-i+1) && (j-i  <= k)){
+                  
+                    return true;
+                }
+                j++;
+            }
+            
+        }
+        
+        return false;
+        
+    }
+}
