@@ -1,0 +1,31 @@
+class Solution {
+    public List<List<Integer>> findTriplets(int[] arr) {
+        // HashMap to store the indices of each element
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        // Step 1: Populate the map with indices of elements
+        for (int i = 0; i < arr.length; i++) {
+            map.computeIfAbsent(arr[i], k -> new ArrayList<>()).add(i);
+        }
+
+        // Step 2: Find triplets
+        for (int j = 1; j < arr.length - 1; j++) {
+            for (int k = j + 1; k < arr.length; k++) {
+                int sum = -1 * (arr[j] + arr[k]);
+                // If the sum exists in the map, check for valid indices
+                List<Integer> indices = map.get(sum);
+                if (indices != null) {
+                    for (int i : indices) {
+                        if (i < j) {
+                            // Add the valid triplet to the result
+                            res.add(List.of(i, j, k));
+                        }
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+}
