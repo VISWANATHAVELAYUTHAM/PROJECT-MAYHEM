@@ -1,0 +1,16 @@
+
+class Solution {
+    public int minIncrements(int[] arr) {
+        Arrays.sort(arr);  // Sort the array first
+        int moves = 0;
+        
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] <= arr[i - 1]) { // If current element is not greater than previous
+                int increment = arr[i - 1] - arr[i] + 1; // Calculate the required increment
+                arr[i] += increment; // Make the current element unique and greater
+                moves += increment; // Count this increment as part of total moves
+            }
+        }
+        return moves;
+    }
+}
