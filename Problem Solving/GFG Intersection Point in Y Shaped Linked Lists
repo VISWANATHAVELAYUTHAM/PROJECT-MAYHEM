@@ -1,0 +1,57 @@
+  int intersectPoint(Node head1, Node head2) {
+        // code here
+        
+        Node left = head1;
+        Node right = head2;
+        
+        int left1 = 0;
+        int right1 = 0;
+        
+        
+        while(left!=null){
+            
+            left1++;
+            
+            left = left.next;
+            
+            
+        }
+        
+        while(right!=null){
+            right1++;
+            right = right.next;
+        }
+        
+        if(left1>right1){
+            
+            int diff = left1-right1;
+            
+            while(diff>0){
+                head1 = head1.next;
+                diff--;
+                
+            }
+        }
+        else {
+            int diff = right1-left1;
+            while(diff>0){
+                head2 = head2.next;
+                diff--;
+            }
+        }
+        
+        
+        Node current1 = head1;
+        Node current2 = head2;
+        
+        while(current1.next!=null && current2.next!=null){
+            if(current1.next==current2.next){
+                return current1.next.data;
+            }
+            
+            current1 = current1.next;
+            current2 = current2.next;
+        }
+        
+        return -1;
+    }
