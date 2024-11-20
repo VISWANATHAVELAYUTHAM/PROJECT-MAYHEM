@@ -1,0 +1,15 @@
+class Solution {
+    public List<Integer> findMajority(int[] nums) 
+    {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        List<Integer> ls= new ArrayList<>();
+        int n=nums.length;
+        for(int i=0;i<n;i++)
+        {
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+            if(map.get(nums[i])>n/3&&!ls.contains(nums[i])) ls.add(nums[i]);
+        }
+        Collections.sort(ls);
+        return ls;
+    }
+}
