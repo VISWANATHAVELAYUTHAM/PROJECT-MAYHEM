@@ -1,0 +1,24 @@
+class Solution {
+    // Function is to check whether two strings are anagram of each other or not.
+    public static boolean areAnagrams(String s1, String s2) {
+
+        // Your code here
+        
+        int n = s1.length(), m = s2.length();
+        if(n != m) return false;
+        int[] hash = new int[26];
+        
+        for(int i = 0; i < n; i++){
+            char ch1 = s1.charAt(i);
+            char ch2 = s2.charAt(i);
+            hash[ch1-'a']++;
+            hash[ch2-'a']--;
+        }
+        
+        for(int i = 0; i < 26; i++){
+            if(hash[i] != 0) return false;
+        }
+        
+        return true;
+    }
+}
