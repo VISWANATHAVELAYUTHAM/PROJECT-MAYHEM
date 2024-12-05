@@ -1,0 +1,19 @@
+void sort012(vector<int>& arr) {
+        int n = arr.size();
+        int left = 0;
+        int right = n - 1;
+        int idx = 0;
+        while(idx <= right){
+            if(arr[idx] == 0){
+                swap(arr[idx], arr[left]);
+                left++;
+                idx++;
+            }else if(arr[idx] == 1){
+                idx++;
+            }else{
+                swap(arr[idx], arr[right]);
+                right--;
+            }
+        }
+        return;
+    }
