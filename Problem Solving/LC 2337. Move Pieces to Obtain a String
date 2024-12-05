@@ -1,0 +1,20 @@
+class Solution {
+     public static boolean canChange(String start, String target) {
+        int si=0,ti=0,n=start.length();
+        while(si<n || ti<n){  // here or is important inorder to avoid the early ending case src= _L , target = LL
+            while (si<n && start.charAt(si)=='_')si++;
+            while (ti<n && target.charAt(ti)=='_')ti++;
+            if(si>=n || ti>=n){
+                // if anyone idx reaches to end that means all chars have been found
+                // if other doesnot reaches to end that means it have some extra characters which are not present in other string
+                return (si==n && ti==n);
+            }
+            char sc=start.charAt(si);
+            char tc=target.charAt(ti);
+            if(sc!=tc)return false;
+            if ((tc=='L' && si<ti) || (tc=='R' && si>ti))return false;
+            si++;ti++;
+        }
+        return true;
+    }
+}
