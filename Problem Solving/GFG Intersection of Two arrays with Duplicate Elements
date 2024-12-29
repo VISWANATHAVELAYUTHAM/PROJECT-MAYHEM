@@ -1,0 +1,14 @@
+class Solution {
+    public ArrayList<Integer> intersectionWithDuplicates(int[] a, int[] b) {
+        HashSet<Integer> set=new HashSet<>();
+        for(int v: a)set.add(v);
+        ArrayList<Integer> ans=new ArrayList<>();
+        for(int v:b){
+            if(set.contains(v)){
+                ans.add(v);
+                set.remove(v);
+            }
+        }
+        return ans;
+    }
+}
