@@ -1,0 +1,32 @@
+class Solution {
+    static ArrayList<Integer> subarraySum(int[] arr, int target) {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        // Initialize the pointers and current sum
+        int start = 0, currentSum = 0;
+
+        // Traverse through the array
+        for (int end = 0; end < arr.length; end++) {
+            // Add the current element to the current sum
+            currentSum += arr[end];
+
+            // Adjust the window size to maintain the target sum
+            while (currentSum > target && start <= end) {
+                currentSum -= arr[start];
+                start++;
+            }
+
+            // Check if the current sum equals the target
+            if (currentSum == target) {
+                // Add 1-based indices to the result
+                result.add(start + 1);
+                result.add(end + 1);
+                return result;
+            }
+        }
+
+        // If no subarray is found, return [-1]
+        result.add(-1);
+        return result;
+    }
+}
