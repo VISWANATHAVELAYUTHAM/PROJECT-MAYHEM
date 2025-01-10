@@ -1,0 +1,23 @@
+ArrayList<Integer> countDistinct(int arr[], int k) {
+        //using sliding window
+        int n = arr.length;
+        HashMap<Integer, Integer>map = new HashMap<>();
+        for(int i=0; i<k; i++){
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        
+        ArrayList<Integer>res = new ArrayList<>();
+        res.add(map.size());
+        int j = 0;
+        for(int i = k; i<n; i++){
+            if(map.get(arr[j])==1)map.remove(arr[j]);
+            else map.put(arr[j], map.getOrDefault(arr[j], 0 ) - 1);
+            
+            j++;
+            
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+            res.add(map.size());
+        }
+        
+        return res;
+    }
