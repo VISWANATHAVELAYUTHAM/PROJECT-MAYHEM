@@ -1,0 +1,32 @@
+class Solution {
+    ArrayList<String> ans = new ArrayList<>();
+    HashSet<String> set = new HashSet<>();
+    public ArrayList<String> findPermutation(String s) {
+        // Code here
+        boolean arr[] = new boolean[s.length()];
+        fun("",s,arr);
+        return ans;
+        
+    }
+    public void fun(String sub , String s , boolean[] visited){
+        if(sub.length() == s.length()){
+            if(!set.contains(sub)){
+                set.add(sub);
+                ans.add(new String(sub));
+                
+            }
+            return;
+        }
+        
+        
+        for(int i = 0; i < s.length(); i++){
+            if(visited[i] == false)
+            {sub += s.charAt(i);
+            visited[i] = true;
+            fun(sub,s,visited);
+            visited[i] = false;
+            sub = sub.substring(0,sub.length()-1);}
+            
+        }
+    }
+}
