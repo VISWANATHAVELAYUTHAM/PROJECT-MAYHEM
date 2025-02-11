@@ -1,0 +1,25 @@
+class Solution {
+    public String removeOccurrences(String s, String part) {
+        char p = part.charAt(0);
+        int flag = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == p) {
+                int j = 0;
+                while (j < part.length() && i + j < s.length() && s.charAt(i + j) == part.charAt(j)) {
+                    j++;
+                }
+                if (j == part.length()) {
+                    flag = 1;
+                    String l = s.substring(0, i);
+                    String r = s.substring(i + j);
+                    s = l + r;
+                    break;
+                }
+            }
+        }
+        if (flag == 1) {
+            return removeOccurrences(s, part);
+        }
+        return s;
+    }
+}
