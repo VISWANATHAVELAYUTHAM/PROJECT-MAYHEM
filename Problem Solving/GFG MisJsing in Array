@@ -1,0 +1,15 @@
+class Solution {
+  public:
+    int missingNum(vector<int>& arr) {
+        // code here
+        long long sum=0;
+        for(auto it : arr)
+        {
+            sum+=it;
+        }
+        long long n = arr.size()+1;
+        long long mSum = n*(n+1)/2;
+        // cout << mSum << " "<<sum;
+        return abs(sum - mSum);
+    }
+};
