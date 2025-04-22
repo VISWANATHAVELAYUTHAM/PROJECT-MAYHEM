@@ -1,0 +1,17 @@
+class Solution {
+    public int findUnique(int[] arr) {
+        // code here
+      HashMap<Integer,Integer> hm = new HashMap<>();
+      
+      for(int n : arr)
+      {
+         hm.put(n,hm.getOrDefault(n,0)+1);
+      }
+      for(int n : hm.keySet())
+      {
+          if(hm.get(n)==1)
+          return n;
+      }
+      return -1;
+    }
+}
