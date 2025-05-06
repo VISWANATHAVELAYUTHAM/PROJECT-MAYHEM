@@ -1,0 +1,22 @@
+class Solution {
+    // Function to return list containing elements of left view of binary tree.
+    ArrayList<Integer> leftView(Node root) {
+        ArrayList<Integer> solution = new ArrayList<>();
+        if (root == null) return solution;
+        
+        Queue<Node> queue = new LinkedList<>();
+        
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            solution.add(queue.peek().data);
+            int n = queue.size();
+            for (int i = 0; i < n; i++) {
+                Node currNode = queue.poll();
+                if (currNode.left != null) queue.add(currNode.left);
+                if (currNode.right != null) queue.add(currNode.right);
+            }
+        }
+        
+        return solution;
+    }
+}
