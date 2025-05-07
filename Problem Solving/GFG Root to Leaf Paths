@@ -1,0 +1,26 @@
+class Solution {
+    
+    static void f(Node node, ArrayList<Integer> psf, ArrayList<ArrayList<Integer>> ans){
+        if(node==null)return ;
+        if(node.left==null && node.right==null){
+            psf.add(node.data);           
+            ans.add(new ArrayList<>(psf));
+            psf.remove(psf.size()-1);
+            return ;
+        }
+        
+        psf.add(node.data);
+        f(node.left,psf, ans);
+        f(node.right,psf, ans);
+        psf.remove(psf.indexOf(node.data));
+    }
+    
+    
+    public static ArrayList<ArrayList<Integer>> Paths(Node root) {
+        ArrayList<ArrayList<Integer>> ans=new ArrayList<>();
+        ArrayList<Integer> psf=new ArrayList<>();
+        f(root, psf, ans);
+        return ans;
+        
+    }
+}
