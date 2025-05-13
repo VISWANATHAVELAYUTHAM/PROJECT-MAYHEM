@@ -1,0 +1,33 @@
+class Solution {
+    public int lengthAfterTransformations(String s, int t) {
+        int[] freq = new int[26];
+        int MOD = 1_000_000_007;
+
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a'] = (freq[ch - 'a'] + 1) % MOD;
+        }
+
+        while (t-- > 0) {
+            int zCount = freq[25];
+            freq[25] = 0;
+
+            for (int i = 24; i >= 0; i--) {
+                freq[i + 1] = freq[i];
+                freq[i] = 0;
+            }
+
+            // convert 'z' into 'a' and 'b'
+            if (zCount > 0) {
+                freq[0] = (freq[0] + zCount) % MOD;
+                freq[1] = (freq[1] + zCount) % MOD;
+            }
+        }
+
+        int totalLength = 0;
+        for (int count : freq) {
+            totalLength = (totalLength + count) % MOD;
+        }
+
+        return totalLength;
+    }
+}
