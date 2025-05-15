@@ -1,0 +1,8 @@
+class Solution {
+    public int countSubstring(String s) {
+        int[] freq=new int[26];
+        int ans=0;
+        for(char c:s.toCharArray()) ans+=++freq[c-'a'];
+        return ans;
+    }
+}
