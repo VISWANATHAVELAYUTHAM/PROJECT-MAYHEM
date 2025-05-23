@@ -1,0 +1,24 @@
+class Solution {
+    static int noOfWays(int m, int n, int x) {
+        // dp[i][j] will store the number of ways to get sum j with i dice
+        int[][] dp = new int[n + 1][x + 1];
+
+        // Base case: with 0 dice, we can make sum 0 in 1 way (do nothing)
+        dp[0][0] = 1;
+
+        // Loop through number of dice
+        for (int i = 1; i <= n; i++) {
+            // Loop through possible sums
+            for (int j = 1; j <= x; j++) {
+                // Loop through possible face values
+                for (int k = 1; k <= m; k++) {
+                    if (j - k >= 0) {
+                        dp[i][j] += dp[i - 1][j - k];
+                    }
+                }
+            }
+        }
+
+        return dp[n][x];
+    }
+};
