@@ -1,0 +1,22 @@
+class Solution {
+    int maxi=-1,levelMax=-1;
+    public int sumOfLongRootToLeafPath(Node root) {
+        func(root,0,0);
+        return maxi;
+    }
+    private void func(Node root, int maxLevel,int sum){
+        if(root==null){
+            if(levelMax<maxLevel){
+                maxi=sum;
+                levelMax=maxLevel;
+            }else if(levelMax==maxLevel){
+                maxi=Math.max(maxi,sum);
+            }
+            return;
+        }
+        
+        
+             func(root.left,maxLevel+1,sum+root.data);
+             func(root.right,maxLevel+1,sum+root.data);
+    }
+}
