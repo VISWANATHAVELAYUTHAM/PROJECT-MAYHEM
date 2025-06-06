@@ -1,0 +1,46 @@
+
+
+class Solution {
+    public String robotWithString(String s) {
+        int n = s.length(); // Get the length of the input string
+
+        // suffixMin[i] stores the smallest character in s[i...n-1] (the suffix starting at index i)
+        int[] suffixMin = new int[n + 1];
+        suffixMin[n] = Integer.MAX_VALUE; // Initialize the last element to infinity for comparison
+
+        // Calculate the suffix minimums from right to left. ✨
+        // Why❓
+
+/* Imagine that you are solving Sudoku. To fill in a cell, 
+you need to know information from other cells (in the same row,
+ column, and square). You can't just start from the top left 
+corner and move on, ignoring everything that happens next. 
+You often need to look forward or backward to find clues.
+
+In our case, a similar situation occurs with suffixMin. 
+To find out which is the SMALLEST!! character in the suffix 
+starting at position i, we need to know which characters are 
+further down the line!
+*/
+
+        // ✅ Math.min() can work with the char type //
+        for (int i = n - 1; i >= 0; i--) {
+            suffixMin[i] = Math.min(s.charAt(i), suffixMin[i + 1]); // Find minimum and store it
+        }
+
+        StringBuilder result = new StringBuilder(); // To build our lexicographically smallest string. 📝
+        Stack<Character> stack = new Stack<>(); // We'll use a stack to temporarily store characters. 📦
+
+        // The main loop that iterates through the input string. 💫
+        for (int i = 0; i < n; i++) {
+            stack.push(s.charAt(i)); // Push the current character onto the stack.
+
+            // While the stack is not empty AND the top of the stack is <= smallest character in the remaining suffix...
+            while (!stack.isEmpty() && stack.peek() <= (char) suffixMin[i + 1]) {
+                result.append(stack.pop()); // Pop from stack and add to result.
+            }
+        }
+
+        return result.toString(); // Return the resulting string. 🎉
+    }
+}
