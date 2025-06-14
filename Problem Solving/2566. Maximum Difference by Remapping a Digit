@@ -1,0 +1,47 @@
+class Solution 
+{
+    public int minMaxDifference(int num) 
+    {
+        // Step 1: Convert number to string
+        String n = String.valueOf(num);
+
+        // Step 2: Maximize - find first non-'9' digit and replace all its occurrences with '9'
+        char toReplaceMax = 0;
+        for (int i = 0; i < n.length(); i++) 
+        {
+            if (n.charAt(i) != '9') 
+            {
+                toReplaceMax = n.charAt(i);
+                break;
+            }
+        }
+
+        String maxStr = n;
+        if (toReplaceMax != 0) 
+        {
+            // Replace all occurrences of toReplaceMax with '9'
+            maxStr = maxStr.replace(toReplaceMax, '9');
+        }
+
+        // Step 3: Minimize - find first non-'0' digit and replace all its occurrences with '0'
+        char toReplaceMin = 0;
+        for (int i = 0; i < n.length(); i++) 
+        {
+            if (n.charAt(i) != '0') 
+            {
+                toReplaceMin = n.charAt(i);
+                break;
+            }
+        }
+
+        String minStr = n;
+        if (toReplaceMin != 0) 
+        {
+            // Replace all occurrences of toReplaceMin with '0'
+            minStr = minStr.replace(toReplaceMin, '0');
+        }
+
+        // Step 4: Convert both strings to integers and return the difference
+        return Integer.parseInt(maxStr) - Integer.parseInt(minStr);
+    }
+}
