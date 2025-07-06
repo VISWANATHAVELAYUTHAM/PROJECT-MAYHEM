@@ -1,0 +1,56 @@
+class FindSumPairs {
+    int[] nums1;
+    int[] nums2;
+
+    Map<Integer, Integer> freq1;
+    Map<Integer, Integer> freq2;
+    List<Integer> sortedNums1Keys;
+
+    public FindSumPairs(int[] arr1, int[] arr2) {
+        nums1 = arr1;
+        nums2 = arr2;
+
+        freq1 = new HashMap<>();
+        freq2 = new HashMap<>();
+
+        for (int val : nums1) {
+            freq1.put(val, freq1.getOrDefault(val, 0) + 1);
+        }
+        sortedNums1Keys = new ArrayList<>(freq1.keySet());
+        Collections.sort(sortedNums1Keys);
+
+        for (int val : nums2) {
+            freq2.put(val, freq2.getOrDefault(val, 0) + 1);
+        }
+    }
+
+    public void add(int index, int val) {
+        int oldVal = nums2[index];
+        int newVal = oldVal + val;
+
+        int oldCount = freq2.get(oldVal);
+        if (oldCount == 1) {
+            freq2.remove(oldVal);
+        } else {
+            freq2.put(oldVal, oldCount - 1);
+        }
+
+        freq2.put(newVal, freq2.getOrDefault(newVal, 0) + 1);
+        nums2[index] = newVal;
+    }
+
+    public int count(int target) {
+        int total = 0;
+        for (int val1 : sortedNums1Keys) {
+            if (val1 > target)
+                break;
+
+            int val2 = target - val1;
+            Integer count2 = freq2.get(val2);
+            if (count2 != null) {
+                total += freq1.get(val1) * count2;
+            }
+        }
+        return total;
+    }
+}
