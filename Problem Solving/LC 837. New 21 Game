@@ -1,0 +1,42 @@
+class Solution {
+    public double new21Game(int n, int k, int maxPts) {
+        /**** MATHS  *******/
+        // Given k <= \sum_{i=1}^{N} a_i <= n [ note: N is not contrained here]
+        // We want to find  P(\sum_{i=1}^{N} a_i = K) where k <=K <= n
+        
+        // Now we can write P(\sum_{i=1}^{N} a_i = K) = \sum_{z=1}^{maxpts} P(\sum_{i=1}^{N-1} a_i = K-z) P(a_N = z)
+
+        // We know that P(a_N = Z) = 1/maxPts [all values are equiprobable]
+
+        // so P(\sum_{i=1}^{N} a_i = K) = 1/maxPts * \sum_{z=1}^{maxpts} P(\sum_{i=1}^{N} a_i = K-z)
+        // Since N is not contrained here So we will consider N = inf which will cover all the probability where sum of any number of integers is equal to K
+
+        // so dp[K] = P(\sum_{i} a_i = K) 
+
+        // We can write above equation as dp[k] = 1/maxpts *  \sum_{z=1}^{maxpts} dp[K-z]
+        // Here dp[K-z] = 0 if K-z < 0 or K-z > k  
+
+        double dp[] = new double[n+1];
+        dp[0]=1.0;
+        double windowSum = 0;
+        for(int i=1;i<=n;i++){
+            /** Commented code is bit slow. We can implement the same using sliding window as well */
+            // for(int j = Math.max(0,i-maxPts);j<Math.min(i,k);j++){
+            //     dp[i] += dp[j];
+            // }
+            // dp[i] /=maxPts;
+            if(i-1 < k){
+                windowSum +=  dp[i-1];
+            }
+            if(i-maxPts-1>=0 && i-maxPts-1 < k ){
+                windowSum -= dp[i-maxPts-1];
+            }
+            dp[i] = windowSum/maxPts;
+        }
+        double sum=0;
+        for(int i=k;i<=n;i++){
+            sum+=dp[i];
+        }
+        return sum;
+    }
+}
