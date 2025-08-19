@@ -1,0 +1,66 @@
+import java.util.*;
+
+class Solution {
+
+    // Fenwick Tree (BIT) for prefix maximum queries
+    static class BITMax {
+        int n;
+        int[] bit;
+        BITMax(int n) {
+            this.n = n;
+            this.bit = new int[n + 2];
+            Arrays.fill(this.bit, -1);
+        }
+        void update(int idx, int val) { // idx: 0-based rank
+            idx += 1;
+            while (idx <= n + 1) {
+                if (val > bit[idx]) bit[idx] = val;
+                idx += idx & -idx;
+            }
+        }
+        int query(int idx) { // max over [0..idx], idx: 0-based rank
+            if (idx < 0) return -1;
+            int res = -1;
+            idx += 1;
+            while (idx > 0) {
+                if (bit[idx] > res) res = bit[idx];
+                idx -= idx & -idx;
+            }
+            return res;
+        }
+    }
+
+    public ArrayList<Integer> farMin(int[] arr) {
+        int n = arr.length;
+        ArrayList<Integer> result = new ArrayList<>(n);
+        if (n == 0) return result;
+
+        // Coordinate compression of values
+        int[] vals = Arrays.copyOf(arr, n);
+        Arrays.sort(vals);
+        int m = 0;
+        for (int i = 0; i < n; i++) {
+            if (i == 0 || vals[i] != vals[i - 1]) vals[m++] = vals[i];
+        }
+        int[] uniq = Arrays.copyOf(vals, m);
+        HashMap<Integer, Integer> rankMap = new HashMap<>(m * 2);
+        for (int i = 0; i < m; i++) rankMap.put(uniq[i], i);
+
+        // BIT to keep the rightmost index for each value rank (and its prefixes)
+        BITMax bit = new BITMax(m + 2);
+
+        int[] ans = new int[n];
+
+        // Process from right to left: at step i, the BIT contains all j>i
+        for (int i = n - 1; i >= 0; i--) {
+            int r = rankMap.get(arr[i]);
+            // Query max index among values strictly less than arr[i]
+            ans[i] = bit.query(r - 1);
+            // Insert current index at its value rank
+            bit.update(r, i);
+        }
+
+        for (int x : ans) result.add(x);
+        return result;
+    }
+}
