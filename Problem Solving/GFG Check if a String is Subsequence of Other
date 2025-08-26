@@ -1,0 +1,27 @@
+class Solution {
+    public boolean isSubSeq(String s1, String s2) {
+        // code here
+        int curr = 0;
+        for(int i = 0;i<s1.length();i++){
+           int r = isHaving(s1.charAt(i),s2,curr);
+           if(r==-1){
+               return false;
+           }else{
+               curr = r;
+           }
+
+        }
+        return true;
+    }
+    
+    public static int isHaving(char c,String s,int ind){
+        
+        for(int i = ind;i<s.length();i++){
+            if(s.charAt(i)==c){
+                return i;
+            }
+        }
+      
+        return -1;
+    }
+};
