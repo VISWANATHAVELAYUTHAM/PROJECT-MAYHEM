@@ -1,0 +1,80 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node next;
+    Node(int d){ data = d; }
+}
+
+public class Solution {
+    // ---- Core solution ----
+    public Node segregate(Node head) {
+        if (head == null || head.next == null) return head;
+
+        // Dummy heads and tails for three buckets: 0s, 1s, 2s
+        Node zeroD = new Node(-1), oneD = new Node(-1), twoD = new Node(-1);
+        Node zeroT = zeroD,        oneT = oneD,        twoT = twoD;
+
+        // Single pass: partition by relinking nodes
+        Node cur = head;
+        while (cur != null) {
+            Node nxt = cur.next;   // store next
+            cur.next = null;       // detach current node
+
+            if (cur.data == 0) {
+                zeroT.next = cur; zeroT = cur;
+            } else if (cur.data == 1) {
+                oneT.next = cur; oneT = cur;
+            } else { // data == 2
+                twoT.next = cur; twoT = cur;
+            }
+            cur = nxt;
+        }
+
+        // Stitch lists: 0s -> 1s -> 2s (skip empty buckets safely)
+        Node newHead;
+        if (zeroD.next != null) {
+            newHead = zeroD.next;
+            zeroT.next = (oneD.next != null) ? oneD.next : twoD.next;
+        } else if (oneD.next != null) {
+            newHead = oneD.next;
+        } else {
+            newHead = twoD.next; // only 2s exist
+        }
+
+        if (oneD.next != null) oneT.next = twoD.next; // connect 1s -> 2s
+        // twoT.next already null
+
+        return newHead;
+    }
+
+    // ---- Helpers for local testing ----
+    static Node buildList(int[] arr){
+        Node dummy = new Node(-1), t = dummy;
+        for(int x: arr){ t.next = new Node(x); t = t.next; }
+        return dummy.next;
+    }
+    static void printList(Node head){
+        Node t = head;
+        StringBuilder sb = new StringBuilder();
+        while(t!=null){ sb.append(t.data).append(' '); t = t.next; }
+        System.out.println(sb.toString().trim());
+    }
+
+    // ---- Driver (reads input, builds list, runs, prints) ----
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        // Example input format:
+        // n
+        // n integers (each 0/1/2)
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for(int i=0;i<n;i++) a[i] = sc.nextInt();
+        Node head = buildList(a);
+
+        Solution sol = new Solution();
+        Node ans = sol.segregate(head);
+        printList(ans);
+        sc.close();
+    }
+}
