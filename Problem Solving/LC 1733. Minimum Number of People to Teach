@@ -1,0 +1,82 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    /**
+     * Calculates the minimum number of people to teach a single language to
+     * so that all friends can communicate.
+     *
+     * @param n           The total number of languages.
+     * @param languages   A 2D array where languages[i] are the languages user i+1 knows.
+     * @param friendships A 2D array representing friendships.
+     * @return The minimum number of people to teach.
+     */
+    public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
+        // Step 1: Convert language arrays to sets for efficient lookups.
+        // User IDs are 1-based, so we create an array of size numUsers + 1.
+        int numUsers = languages.length;
+        Set<Integer>[] userLangs = new HashSet[numUsers + 1];
+        for (int i = 0; i < numUsers; i++) {
+            userLangs[i + 1] = new HashSet<>();
+            for (int lang : languages[i]) {
+                userLangs[i + 1].add(lang);
+            }
+        }
+
+        // Step 2: Identify all users who are in at least one friendship
+        // where communication is not possible.
+        Set<Integer> problematicUsers = new HashSet<>();
+        for (int[] friendship : friendships) {
+            int u = friendship[0];
+            int v = friendship[1];
+            if (!canCommunicate(userLangs[u], userLangs[v])) {
+                problematicUsers.add(u);
+                problematicUsers.add(v);
+            }
+        }
+
+        // If the set is empty, everyone can already communicate.
+        if (problematicUsers.isEmpty()) {
+            return 0;
+        }
+
+        // Step 3: Count the frequency of each language among the problematic users.
+        int[] langFrequency = new int[n + 1];
+        for (int user : problematicUsers) {
+            // For each language the user knows, increment its frequency count.
+            for (int lang : userLangs[user]) {
+                langFrequency[lang]++;
+            }
+        }
+
+        // Step 4: Find the most common language among the problematic users.
+        // This is the language we should teach, as it requires the fewest new learners.
+        int maxFreq = 0;
+        for (int i = 1; i <= n; i++) {
+            if (langFrequency[i] > maxFreq) {
+                maxFreq = langFrequency[i];
+            }
+        }
+
+        // Step 5: The number of people to teach is the total number of users who need
+        // a solution minus those who already know the most popular language.
+        return problematicUsers.size() - maxFreq;
+    }
+
+    /**
+     * Helper function to check if two users can communicate.
+     * It checks for any common element between two sets of languages.
+     */
+    private boolean canCommunicate(Set<Integer> langs1, Set<Integer> langs2) {
+        // For efficiency, always iterate over the smaller set.
+        if (langs1.size() > langs2.size()) {
+            return canCommunicate(langs2, langs1);
+        }
+        for (int lang : langs1) {
+            if (langs2.contains(lang)) {
+                return true; // Found a common language
+            }
+        }
+        return false; // No common language found
+    }
+}
