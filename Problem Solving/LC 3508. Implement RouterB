@@ -1,0 +1,246 @@
+
+/**
+ * A network router implementation that efficiently manages packets with memory constraints.
+ * This router stores packets in a queue, supports deduplication, and provides efficient 
+ * time-range queries using binary search and virtual list implementation with start indices.
+ */
+class Router {
+    /**
+     * Represents a network packet with source, destination, and timestamp information.
+     */
+    static class Packet {
+        private final int sourceId;
+        private final int destinationId;
+        private final int timestamp;
+        
+        /**
+         * Constructs a new packet with the specified attributes.
+         *
+         * @param sourceId      The source identifier of the packet
+         * @param destinationId The destination identifier of the packet
+         * @param timestamp     The time when the packet was created
+         */
+        public Packet(int sourceId, int destinationId, int timestamp) {
+            this.sourceId = sourceId;
+            this.destinationId = destinationId;
+            this.timestamp = timestamp;
+        }
+        
+        /**
+         * Checks if this packet equals another object.
+         * Two packets are considered equal if they have the same source, destination, and timestamp.
+         *
+         * @param object The object to compare with
+         * @return true if the objects are equal, false otherwise
+         */
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) return true;
+            if (!(object instanceof Packet)) return false;
+            Packet packet = (Packet) object;
+            return sourceId == packet.sourceId && 
+                   destinationId == packet.destinationId && 
+                   timestamp == packet.timestamp;
+        }
+        
+        /**
+         * Generates a hash code for this packet based on its attributes.
+         *
+         * @return The hash code value for this packet
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(sourceId, destinationId, timestamp);
+        }
+    }
+    
+    // Number of free memory slots available
+    private int availableMemory;
+    
+    // Queue to maintain packet ordering (FIFO)
+    private final Queue<Packet> packetQueue;
+    
+    // Set for O(1) duplicate checking
+    private final Set<Packet> packetSet;
+    
+    // Maps destination ID to a list of packets for that destination
+    private final Map<Integer, List<Packet>> destinationToPacketsMap;
+    
+    // Maps destination ID to the starting valid index in the corresponding list
+    // Acts as a virtual list by tracking start indices instead of modifying lists
+    private final Map<Integer, Integer> destinationToStartIndexMap;
+    
+    /**
+     * Constructs a router with specified memory limit.
+     *
+     * @param memoryLimit Maximum number of packets this router can store
+     */
+    public Router(int memoryLimit) {
+        this.availableMemory = memoryLimit;
+        this.packetQueue = new LinkedList<>();
+        this.packetSet = new HashSet<>();
+        this.destinationToPacketsMap = new HashMap<>();
+        this.destinationToStartIndexMap = new HashMap<>();
+    }
+    
+    /**
+     * Attempts to add a packet to the router.
+     * If memory is full, removes the oldest packet to make space.
+     * Ignores duplicate packets.
+     *
+     * @param source      The source identifier of the packet
+     * @param destination The destination identifier of the packet
+     * @param timestamp   The timestamp of the packet
+     * @return true if packet was added, false if it was a duplicate
+     */
+    public boolean addPacket(int source, int destination, int timestamp) {
+        Packet newPacket = new Packet(source, destination, timestamp);
+        
+        // Check for duplicates
+        if (packetSet.contains(newPacket)) {
+            return false;
+        }
+        
+        // Handle memory constraints
+        if (availableMemory > 0) {
+            // We have free memory
+            availableMemory--;
+        } else {
+            // Memory is full, evict oldest packet
+            Packet oldestPacket = packetQueue.remove();
+            packetSet.remove(oldestPacket);
+            
+            // Update the start index for the destination of the removed packet
+            int destinationId = oldestPacket.destinationId;
+            int currentStartIndex = destinationToStartIndexMap.get(destinationId);
+            destinationToStartIndexMap.put(destinationId, currentStartIndex + 1);
+        }
+        
+        // Add the new packet
+        packetQueue.add(newPacket);
+        packetSet.add(newPacket);
+        
+        // Initialize data structures for this destination if needed
+        destinationToPacketsMap.putIfAbsent(destination, new ArrayList<>());
+        destinationToStartIndexMap.putIfAbsent(destination, 0);
+        
+        // Add packet to its destination list
+        destinationToPacketsMap.get(destination).add(newPacket);
+        
+        return true;
+    }
+    
+    /**
+     * Forwards the oldest packet in the queue.
+     * This removes the packet from the router and frees up memory.
+     *
+     * @return An array containing [source, destination, timestamp] of the forwarded packet,
+     *         or an empty array if the queue is empty
+     */
+    public int[] forwardPacket() {
+        // Check if there are any packets to forward
+        if (packetQueue.isEmpty()) {
+            return new int[]{};
+        }
+        
+        // Remove the oldest packet
+        Packet packetToForward = packetQueue.remove();
+        packetSet.remove(packetToForward);
+        
+        int destinationId = packetToForward.destinationId;
+        List<Packet> packetsForDestination = destinationToPacketsMap.get(destinationId);
+        
+        // Update the start index for this destination
+        int newStartIndex = destinationToStartIndexMap.get(destinationId) + 1;
+        destinationToStartIndexMap.put(destinationId, newStartIndex);
+        
+        // If all packets for this destination have been processed, clean up the maps
+        if (newStartIndex >= packetsForDestination.size()) {
+            destinationToPacketsMap.remove(destinationId);
+            destinationToStartIndexMap.remove(destinationId);
+        }
+        
+        // Free up memory
+        availableMemory++;
+        
+        // Return the packet data
+        return new int[]{packetToForward.sourceId, packetToForward.destinationId, packetToForward.timestamp};
+    }
+    
+    /**
+     * Counts packets with a specific destination within the given time range.
+     * Uses binary search for efficient time range queries.
+     *
+     * @param destination The destination identifier
+     * @param startTime   The beginning of the time range (inclusive)
+     * @param endTime     The end of the time range (inclusive)
+     * @return The number of packets matching the criteria
+     */
+    public int getCount(int destination, int startTime, int endTime) {
+        // Check if there are any packets for this destination
+        List<Packet> packetsForDestination = destinationToPacketsMap.get(destination);
+        if (packetsForDestination == null || packetsForDestination.isEmpty()) {
+            return 0;
+        }
+        
+        // Get the start index for valid packets for this destination
+        int startIndex = destinationToStartIndexMap.getOrDefault(destination, 0);
+        
+        // Find bounds of time range using binary search
+        int lowerBoundIndex = findLowerBoundIndex(packetsForDestination, startTime, startIndex);
+        int upperBoundIndex = findUpperBoundIndex(packetsForDestination, endTime, startIndex);
+        
+        // Count is the difference between upper and lower bounds
+        return upperBoundIndex - lowerBoundIndex;
+    }
+    
+    /**
+     * Finds the index of the first packet with timestamp >= startTime.
+     * Uses binary search for O(log n) performance.
+     *
+     * @param packets    List of packets to search
+     * @param time       The target start time
+     * @param startIndex The index to start searching from
+     * @return The index of the first packet with timestamp >= time
+     */
+    private int findLowerBoundIndex(List<Packet> packets, int time, int startIndex) {
+        int left = startIndex;
+        int right = packets.size();
+        
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (packets.get(mid).timestamp >= time) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return left;
+    }
+    
+    /**
+     * Finds the index of the first packet with timestamp > endTime.
+     * Uses binary search for O(log n) performance.
+     *
+     * @param packets    List of packets to search
+     * @param time       The target end time
+     * @param startIndex The index to start searching from
+     * @return The index of the first packet with timestamp > time
+     */
+    private int findUpperBoundIndex(List<Packet> packets, int time, int startIndex) {
+        int left = startIndex;
+        int right = packets.size();
+        
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (packets.get(mid).timestamp > time) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        return left;
+    }
+}
