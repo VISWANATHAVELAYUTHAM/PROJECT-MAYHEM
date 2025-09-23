@@ -1,0 +1,15 @@
+class Solution {
+    public void reverseQueue(Queue<Integer> q) {
+        // code here
+         Stack<Integer> stack = new Stack<>();
+     
+        while(q.size() > 0) {
+           stack.push(q.poll());
+        }
+        while(stack.size() > 0) {
+           q.add(stack.pop());
+        }
+        // return q;
+
+    }
+}
