@@ -1,0 +1,44 @@
+class Solution {
+    // Helper class to store node along with its horizontal distance
+    static class Pair {
+        Node node;
+        int hd;
+        Pair(Node node, int hd) {
+            this.node = node;
+            this.hd = hd;
+        }
+    }
+
+    public ArrayList<Integer> bottomView(Node root) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (root == null) return result;
+
+        // TreeMap to store HD -> Node data (keeps keys sorted)
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+
+        // Queue for BFS
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(root, 0));
+
+        // Level order traversal
+        while (!queue.isEmpty()) {
+            Pair curr = queue.poll();
+            Node temp = curr.node;
+            int hd = curr.hd;
+
+            // Update map: latest node at this HD (bottom-most)
+            map.put(hd, temp.data);
+
+            // Add left and right children with updated HDs
+            if (temp.left != null) queue.add(new Pair(temp.left, hd - 1));
+            if (temp.right != null) queue.add(new Pair(temp.right, hd + 1));
+        }
+
+        // Collect results in order of horizontal distance
+        for (int val : map.values()) {
+            result.add(val);
+        }
+
+        return result;
+    }
+}
