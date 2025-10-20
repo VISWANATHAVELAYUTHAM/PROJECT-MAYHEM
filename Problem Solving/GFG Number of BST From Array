@@ -1,0 +1,34 @@
+import java.util.*;
+
+class Solution {
+    public ArrayList<Integer> countBSTs(int[] arr) {
+        int n = arr.length;
+        int[] sorted = arr.clone();
+        Arrays.sort(sorted);
+
+        // Precompute Catalan numbers
+        int[] dp = new int[n + 1];
+        dp[0] = dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                dp[i] += dp[j] * dp[i - j - 1];
+            }
+        }
+
+        // Map value -> count
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int left = i;
+            int right = n - i - 1;
+            map.put(sorted[i], dp[left] * dp[right]);
+        }
+
+        // Build answer in original order
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int val : arr) {
+            ans.add(map.get(val));
+        }
+
+        return ans;
+    }
+}
