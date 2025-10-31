@@ -1,0 +1,34 @@
+class Solution {
+    public int shortCycle(int V, int[][] edges) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+            adj.get(e[1]).add(e[0]);
+        }
+        int ans = Integer.MAX_VALUE;
+        for (int src = 0; src < V; src++) {
+            int[] dist = new int[V];
+            int[] parent = new int[V];
+            Arrays.fill(dist, -1);
+            Arrays.fill(parent, -1);
+            Queue<Integer> q = new LinkedList<>();
+            q.add(src);
+            dist[src] = 0;
+            while (!q.isEmpty()) {
+                int node = q.poll();
+                
+                for (int nbr : adj.get(node)) {
+                    if (dist[nbr] == -1) {
+                        dist[nbr] = dist[node] + 1;
+                        parent[nbr] = node;
+                        q.add(nbr);
+                    } else if (parent[node] != nbr) {
+                        ans = Math.min(ans, dist[node] + dist[nbr] + 1);
+                    }
+                }
+            }
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+}
