@@ -1,0 +1,15 @@
+ def findTwoElement(self, arr):
+        from functools import reduce
+        from operator import xor
+        n = len(arr)
+        duplicate = 0
+        for i in range(n):
+            while (j := arr[i]) != i + 1:
+                if arr[j - 1] == j:
+                    duplicate = j
+                    break
+                arr[i], arr[j - 1] = arr[j - 1], arr[i]
+            if duplicate:
+                break
+        missing = duplicate ^ reduce(xor, range(1, n + 1)) ^ reduce(xor, arr)
+        return duplicate, missing
