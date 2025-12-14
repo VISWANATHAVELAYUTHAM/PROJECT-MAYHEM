@@ -1,0 +1,36 @@
+class Solution {
+    public ArrayList<Integer> prefixSum2D(int[][] mat, int[][] queries) {
+           int n = mat.length;
+        int m = mat[0].length;
+
+        int[][] pref = new int[n + 1][m + 1];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                pref[i][j] = mat[i - 1][j - 1]
+                        + pref[i - 1][j]
+                        + pref[i][j - 1]
+                        - pref[i - 1][j - 1];
+            }
+        }
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for (int[] q : queries) {
+            int r1 = q[0];
+            int c1 = q[1];
+            int r2 = q[2];
+            int c2 = q[3];
+
+            int sum = pref[r2 + 1][c2 + 1]
+                    - pref[r1][c2 + 1]
+                    - pref[r2 + 1][c1]
+                    + pref[r1][c1];
+
+            result.add(sum);
+        }
+
+        return result;
+        
+    }
+}
