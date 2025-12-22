@@ -1,0 +1,28 @@
+class Solution {
+    public int rowWithMax1s(int arr[][]) {
+        
+        int mcnt = 0,res=-1,cnt;
+        for(int i=0 ; i < arr.length;i++){
+            cnt=0;
+            int low = 0,high = arr[0].length-1,mid;
+            while(low<=high){
+                mid = low + (high - low)/2;
+                if(arr[i][low]==1){
+                    cnt = high-low+1; 
+                    break;
+                }
+                else if(arr[i][high]==0) break;
+                
+                
+                if(arr[i][mid]==1) low++;
+                else low=mid+1;
+                
+            }
+            if(cnt>mcnt){
+                mcnt = cnt;
+                res = i;
+            }
+        }
+        return res;
+    }
+}
