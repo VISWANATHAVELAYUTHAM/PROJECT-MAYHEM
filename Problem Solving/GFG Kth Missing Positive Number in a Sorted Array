@@ -1,0 +1,20 @@
+class Solution {
+    public int kthMissing(int[] arr, int k) {
+        // code here
+        HashSet<Integer>st = new HashSet<>();
+        
+        for(int i = 0; i < arr.length; i++){
+            st.add(arr[i]);
+        }
+        
+        int val = 1;
+        while(k > 0){
+            if(!st.contains(val)){
+                k--;
+            }
+            if(k == 0) return val;
+            val=val+1;
+        }
+        return val;
+    }
+}
