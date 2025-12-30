@@ -1,0 +1,72 @@
+class Solution {
+    public Node addTwoLists(Node head1, Node head2) {
+        // code here
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        int carry = 0;
+        
+        ArrayList<Integer> res = new ArrayList<>();
+        
+        while(head1 != null){
+            list1.add(head1.data);
+            head1 = head1.next;
+        }
+        
+        while(head2 != null){
+            list2.add(head2.data);
+            head2 = head2.next;
+        }
+        
+        int i = list1.size()-1;
+        int j = list2.size()-1;
+        
+        while( i >= 0 && j >= 0){
+            
+            int sum = carry + list1.get(i) + list2.get(j);
+            // System.out.print(sum + " ");
+            res.add(sum%10);
+            carry = sum/10;
+
+            i--;
+            j--;
+        }
+        
+        while( i >= 0){
+            
+            int sum = carry + list1.get(i);
+
+            res.add(sum%10);
+            carry = sum/10;
+            
+            i--;
+        }
+        while( j >= 0){
+            
+            int sum = carry + list2.get(j);
+            res.add(sum%10);
+            carry = sum/10;
+            j--;
+        }
+        
+        while(carry != 0){
+            
+            res.add(carry % 10);
+            carry /= 10;
+        }
+        i = res.size()-1;
+        while(res.get(i) == 0 ){
+            i--;
+        }
+        
+        Node root = new Node(res.get(i));
+        Node temp = root;
+        i--;
+        for(; i >= 0; i--){
+
+            root.next = new Node(res.get(i));
+            root = root.next; 
+        }
+        return temp;   
+    }
+}
+
