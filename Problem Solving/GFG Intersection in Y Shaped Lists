@@ -1,0 +1,15 @@
+class Solution {
+    public Node intersectPoint(Node head1, Node head2) {
+        Set<Node> set = new HashSet<>();
+        
+        while (head1 != null) {
+            set.add(head1);
+            head1 = head1.next;
+        }
+        
+        while (!set.contains(head2)) {
+            head2 = head2.next;
+        }
+        return head2;
+    }
+}
