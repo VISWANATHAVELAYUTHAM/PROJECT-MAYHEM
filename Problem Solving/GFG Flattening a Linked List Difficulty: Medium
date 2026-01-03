@@ -1,0 +1,57 @@
+class Solution {
+    
+     private Node mergeList(Node h1, Node h2) {
+        Node newHead = new Node(-1);
+        Node newTail = newHead;
+        while (Objects.nonNull(h1) && Objects.nonNull(h2)) {
+            if (h1.data < h2.data) {
+                newTail.bottom = h1;
+                h1 = h1.bottom;
+            } else {
+                newTail.bottom = h2;
+                h2 = h2.bottom;
+            }
+
+            newTail = newTail.bottom;
+        }
+
+        if (Objects.nonNull(h1)) {
+            newTail.bottom = h1;
+        } else if (Objects.nonNull(h2)) {
+            newTail.bottom = h2;
+        }
+        return newHead.bottom;
+    }
+
+    public Node flatten(Node root) {
+
+        Node flattenListHead = root;
+        Node thirdNode = null;
+
+        // if 2 heads
+        if (Objects.nonNull(root) && Objects.nonNull(root.next)) {
+            Node secondNode = root.next;
+            thirdNode = secondNode.next;
+
+            root.next = null;
+            flattenListHead = mergeList(root, secondNode);
+        }
+
+
+        while (Objects.nonNull(thirdNode)) {
+
+            // capture
+            Node next = thirdNode.next;
+           
+            // isolate
+            thirdNode.next = null;
+            
+            flattenListHead = mergeList(flattenListHead, thirdNode);
+            
+            // move to next list
+            thirdNode = next;
+        }
+
+        return flattenListHead;
+    }
+}
