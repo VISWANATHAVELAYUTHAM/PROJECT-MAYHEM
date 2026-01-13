@@ -1,0 +1,68 @@
+class Solution {
+public boolean canServe(int[] arr) {
+
+
+int cfive = 0 , cten = 0 , ctwenty = 0;
+
+
+for(int x : arr){
+
+
+if(x == 5) cfive++;
+
+
+else if(x == 10){
+
+
+
+if(cfive > 0) {
+
+
+cfive--;
+
+cten++;
+
+}
+
+else return false;
+
+
+}
+
+
+else if (x == 20){
+
+
+if(cfive > 0 && cten > 0){
+
+
+cfive--;
+
+cten--;
+
+ctwenty++;
+
+}
+
+else if(cfive >= 3) {
+
+
+cfive -= 3;
+
+ctwenty++;
+
+}
+
+else return false;
+
+
+}
+
+}
+
+
+return true;
+
+
+}
+}
