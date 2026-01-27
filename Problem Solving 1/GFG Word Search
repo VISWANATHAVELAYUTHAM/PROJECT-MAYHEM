@@ -1,0 +1,21 @@
+class Solution {
+    public boolean isWordExist(char[][] mat, String word) {
+        // Code here
+        for(int i=0;i<mat.length;i++){
+            for(int j=0;j<mat[0].length;j++){
+                if(mat[i][j]==word.charAt(0)){
+                    if(rec(i,j,0,mat,word,new boolean[mat.length][mat[0].length])) return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean rec(int i,int j,int k,char mat[][],String word,boolean vis[][]){
+        if(k==word.length()) return true;
+        if(i<0 || i==mat.length || j<0 || j==mat[0].length || vis[i][j] || mat[i][j]!=word.charAt(k)) return false;
+        vis[i][j]=true;
+        boolean possible=rec(i+1,j,k+1,mat,word,vis) || rec(i,j+1,k+1,mat,word,vis) || rec(i-1,j,k+1,mat,word,vis) || rec(i,j-1,k+1,mat,word,vis);
+        vis[i][j]=false;
+        return possible;
+    }
+}
