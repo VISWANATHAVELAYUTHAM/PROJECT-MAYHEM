@@ -1,0 +1,40 @@
+class Solution {
+    public int maxCircularSum(int arr[]) {
+
+ int globalMax=arr[0];
+ int golbalMin=arr[0];
+ int currMin=0;
+ int currMax=0;
+ int n=arr.length;
+ int totalSum=0;
+ for(int i=0;i<n;i++)
+ {
+     currMax+=arr[i];
+     totalSum+=arr[i];
+     if(currMax<0)
+     {
+         currMax=0;
+         globalMax=Math.max(arr[i],globalMax);
+
+     }
+     else{
+        globalMax=Math.max(currMax,globalMax);
+     }
+     
+     currMin+=arr[i];
+     if(currMin>0)
+     {
+         currMin=0;
+     }
+     else{
+        golbalMin=Math.min(currMin,golbalMin);
+     }
+     
+ }
+ if(globalMax<0)
+ return globalMax;
+ 
+ return Math.max(totalSum-golbalMin,globalMax);
+ 
+    }
+}
