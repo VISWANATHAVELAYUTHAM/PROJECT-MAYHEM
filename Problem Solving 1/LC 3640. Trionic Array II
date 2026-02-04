@@ -1,0 +1,30 @@
+class Solution {
+    public long maxSumTrionic(int[] arr) {
+//        dp[0] = start phase
+//        dp[1] = 1st increasing phase
+//        dp[2] = 1st decreasing phase
+//        dp[3] = 2nd increasing
+        long[][] dp = new long[4][arr.length];
+        Arrays.stream(dp).forEach(row -> Arrays.fill(row,(long) -1e18));
+        long sum = (long) -1e18;
+        for(int i=0;i<arr.length;i++){
+            dp[0][i] = arr[i];
+            if(i>0){
+                if(arr[i]>arr[i-1]){
+                    //start increasing here OR we are already in increasing phase
+                    dp[1][i] = Math.max(dp[0][i-1]+arr[i],dp[1][i-1]+arr[i]);
+                }
+                if(arr[i]<arr[i-1]){
+                    //start decreasing phase here OR we are already in it
+                    dp[2][i] = Math.max(dp[1][i-1]+arr[i],dp[2][i-1]+arr[i]);
+                }
+                if(arr[i]>arr[i-1]){
+                    //start 2nd increasing phase or we are already in prev 2nd increasing phase
+                    dp[3][i] = Math.max(dp[2][i-1]+arr[i],dp[3][i-1]+arr[i]);
+                }
+                sum = Math.max(sum, dp[3][i]);
+            }
+        }
+        return sum;
+    }
+}
