@@ -1,0 +1,44 @@
+class Solution {
+    public int kokoEat(int[] arr, int k) {
+        // code here
+        int left = 1, right = 0;
+        //Find max pile
+        for(int pile : arr)
+            right = Math.max(right, pile);
+        
+        //Set result
+        int res = right; //Worst scenario
+        
+        //Binary search between left and right (possible s)
+        //If koko can finish all piles using mid speed, res = mid
+        //and try a smaller s
+        //If koko can't finish all piles using mid speed, try a bigger s
+        
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(canFinish(arr, k, mid)){
+                res = mid; //possible but maybe too fast
+                right = mid - 1;   //try smaller
+            }
+            else
+                left = mid + 1;    //too slow, try bigger
+        }
+        
+        //Return final s
+        return res;
+    }
+    public boolean canFinish(int arr[], int k, int s){
+        //Calculate time koko takes to finish all the piles 
+        //using the given s
+        int hours = 0;
+        for(int pile : arr){
+            hours += (pile + s - 1) / s;   //ceil(pile/s)
+            if (hours > k) 
+                return false;
+        }
+            
+        //Check if it's within the given k
+        return hours <= k;
+    }
+}
+ 
