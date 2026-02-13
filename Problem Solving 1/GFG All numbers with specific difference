@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    bool checker(int num,int diff){
+        int sum_of_digits=0;
+        int n=num;
+        while(num){
+            sum_of_digits+=num%10;
+            num/=10;
+        }
+        return n-sum_of_digits>=diff;
+    }
+    int getCount(int n, int d) {
+        // code here
+        int ans=-1;
+        int low=10,high=n;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(checker(mid,d)){
+                ans=mid;
+                high=mid-1;
+            } else low=mid+1;
+        }
+        if(ans==-1)return 0;
+        return n-ans+1;
+    }
+};
