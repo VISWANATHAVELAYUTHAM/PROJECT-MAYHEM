@@ -1,0 +1,27 @@
+class Solution {
+    
+    public static int overlapInt(int[][] arr) {
+        
+        int low = Integer.MAX_VALUE;
+        int high = Integer.MIN_VALUE;
+        for(int []i : arr) {
+            low = Math.min(low, i[0]);
+            high = Math.max(high, i[1] + 1);
+        }
+        
+        int []diff = new int[high+1];
+        
+        for(int []i : arr) {
+            diff[i[0]]++;
+            diff[i[1] + 1]--;
+        }
+        
+        int result = 0;
+        for(int i = low; i < high; i++) {
+            diff[i] += diff[i-1];
+            result = Math.max(result, diff[i]);
+        }
+        
+        return result;
+    }
+}
