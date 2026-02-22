@@ -1,0 +1,15 @@
+int binaryGap(int n) {
+    n >>= Integer.numberOfTrailingZeros(n); //remove trailing zeros
+    if (n == 1) return 0;                   //n is a power of two
+
+    int gap = 0, maxGap = 0;
+    while (n > 0) {
+        if ((n & 1) == 1) {                 //found set bit
+            maxGap = Math.max(maxGap, gap);
+            gap = 0;                        //reset gap
+        } else
+            gap++;                          //increase gap
+        n >>= 1;                            //advance to next bit
+    }
+    return maxGap + 1;
+}
