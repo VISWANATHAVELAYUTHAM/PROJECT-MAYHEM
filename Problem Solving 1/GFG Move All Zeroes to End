@@ -1,0 +1,13 @@
+class Solution {
+    void pushZerosToEnd(int[] arr) {
+        int n = arr.length, idx = 0;
+
+        for(int i = 0;i < n;i++){
+            if(arr[i] != 0)
+                arr[idx++] = arr[i];
+        }
+
+        while(idx < n)
+            arr[idx++] = 0;
+    }
+}
