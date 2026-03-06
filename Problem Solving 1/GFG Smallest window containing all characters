@@ -1,0 +1,61 @@
+class Solution {
+    
+    public static boolean isAllFreqGreaterOrEqual(HashMap<Character , Integer> s_map , HashMap<Character , Integer> p_map){
+        for(char sChar : s_map.keySet()){
+            int freq1 = s_map.get(sChar);
+            int freq2 = p_map.get(sChar);
+            if(freq1 < freq2){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static String minWindow(String s, String p) {
+        // code here
+        HashMap<Character , Integer> p_map = new HashMap<>();
+        HashMap<Character , Integer> s_map = new HashMap<>();
+        
+        int leftIdx = -1;
+        int rightIdx = -1;
+        
+        int lenS = s.length();
+        int lenP = p.length();
+        int minLen = Integer.MAX_VALUE;
+        
+        for(int i = 0 ; i < lenP ; i++){
+            p_map.put(p.charAt(i) , p_map.getOrDefault(p.charAt(i) , 0) + 1);
+        }
+        
+        int i = 0;
+        int j = 0;
+        
+        while(j < lenS){
+            char ch = s.charAt(j);
+            if(p_map.containsKey(ch)){
+                s_map.put(ch , s_map.getOrDefault(ch , 0) + 1);
+            }
+            
+            while((s_map.size() >= p_map.size()) && (isAllFreqGreaterOrEqual(s_map , p_map))){
+                int currLen = j - i + 1;
+                if(currLen < minLen){
+                    leftIdx = i;
+                    rightIdx = j;
+                    minLen = currLen;
+                }
+                char ch1 = s.charAt(i);
+                
+                if(s_map.containsKey(ch1)){
+                    s_map.put(ch1 , s_map.getOrDefault(ch1 , 0) - 1);
+                    if(s_map.get(ch1) <= 0){
+                        s_map.remove(ch1);
+                    }
+                }
+                i++;
+            }
+            j++;
+        }
+        if(leftIdx == -1 && rightIdx == -1) return "";
+        
+        return s.substring(leftIdx , (rightIdx + 1));
+    }
+}
