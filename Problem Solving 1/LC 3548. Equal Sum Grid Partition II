@@ -1,0 +1,195 @@
+class Solution {
+    public boolean canPartitionGrid(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        long[] prefRowSum = new long[n];
+        long[] sufRowSum = new long[n];
+
+        HashMap<Integer,Integer> prefRowCount = new HashMap<>();
+        HashMap<Integer,Integer> sufRowCount = new HashMap<>();
+        HashMap<Integer,Integer> prefColCount = new HashMap<>();
+        HashMap<Integer,Integer> sufColCount = new HashMap<>();
+
+        long[] prefColSum = new long[m];
+        long[] sufColSum = new long[m];
+
+
+        for(int i = 0 ; i<n ; i++){
+            for(int j = 0 ; j<m ; j++){
+                prefRowSum[i] += grid[i][j];
+                prefColSum[j] += grid[i][j];
+                sufRowCount.put(grid[i][j],sufRowCount.getOrDefault(grid[i][j],0)+1);
+                sufColCount.put(grid[i][j],sufColCount.getOrDefault(grid[i][j],0)+1);
+            }
+        }
+
+        sufRowSum[n-1] = prefRowSum[n-1];
+        for(int i = n-2 ; i>-1 ; i--){
+            sufRowSum[i] = sufRowSum[i+1] + prefRowSum[i];
+        }
+
+        for(int i = 1 ; i<n ; i++){
+            for(int j = 0 ; j<m ; j++){
+                prefRowCount.put(grid[i-1][j],prefRowCount.getOrDefault(grid[i-1][j],0)+1);
+                sufRowCount.put(grid[i-1][j],prefRowCount.get(grid[i-1][j])-1);
+                if(prefRowCount.get(grid[i-1][j])==0) prefRowCount.remove(grid[i-1][j]);
+            }
+
+            prefRowSum[i] += prefRowSum[i-1];
+            if(m==1){
+                if(prefRowSum[i-1]>sufRowSum[i]){
+                    if((prefRowSum[i-1]-sufRowSum[i])>100000) continue;
+                    int diff = (int)(prefRowSum[i-1]-sufRowSum[i]);
+                    if(diff==grid[0][0] || diff==grid[i-1][0]) return true;
+                }
+                else if(prefRowSum[i-1]<sufRowSum[i]){
+                    if((sufRowSum[i]-prefRowSum[i-1])>100000) continue;
+                    int diff = (int)(sufRowSum[i]-prefRowSum[i-1]);
+                    if(diff==grid[i][0] || diff==grid[n-1][0]) return true;
+                }
+                else if(prefRowSum[i-1]==sufRowSum[i]) return true;
+            }
+            else if(i==1 && i==n-1){
+                if(prefRowSum[i-1]>sufRowSum[i]){
+                    if((prefRowSum[i-1]-sufRowSum[i])>100000) continue;
+                    int diff = (int)(prefRowSum[i-1]-sufRowSum[i]);
+                    if(diff==grid[0][0] || diff==grid[0][m-1]) return true;
+                }
+                else if(prefRowSum[i-1]<sufRowSum[i]){
+                    if((sufRowSum[i]-prefRowSum[i-1])>100000) continue;
+                    int diff = (int)(sufRowSum[i]-prefRowSum[i-1]);
+                    if(diff==grid[n-1][0] || diff==grid[n-1][m-1]) return true;
+                }
+                else if(prefRowSum[i-1]==sufRowSum[i]) return true;
+            }
+
+            else if(i==1){
+                if(prefRowSum[i-1]>sufRowSum[i]){
+                    if((prefRowSum[i-1]-sufRowSum[i])>100000) continue;
+                    int diff = (int)(prefRowSum[i-1]-sufRowSum[i]);
+                    if(diff==grid[0][0] || diff==grid[0][m-1]) return true;
+                }
+                else if(prefRowSum[i-1]<sufRowSum[i]){
+                    if((sufRowSum[i]-prefRowSum[i-1])>100000) continue;
+                    int diff = (int)(sufRowSum[i]-prefRowSum[i-1]);
+                    if(sufRowCount.containsKey(diff)) return true;
+                }
+                else if(prefRowSum[i-1]==sufRowSum[i]) return true;
+            }
+            else if(i==n-1){
+                if(prefRowSum[i-1]>sufRowSum[i]){
+                    if((prefRowSum[i-1]-sufRowSum[i])>100000) continue;
+                    int diff = (int)(prefRowSum[i-1]-sufRowSum[i]);
+                    if(prefRowCount.containsKey(diff)) return true;
+                }
+                else if(prefRowSum[i-1]<sufRowSum[i]){
+                    if((sufRowSum[i]-prefRowSum[i-1])>100000) continue;
+                    int diff = (int)(sufRowSum[i]-prefRowSum[i-1]);
+                    if(diff==grid[n-1][0] || diff==grid[n-1][m-1]) return true;
+                }
+                else if(prefRowSum[i-1]==sufRowSum[i]) return true;
+            }
+
+            else{
+                if(prefRowSum[i-1]>sufRowSum[i]){
+                    if((prefRowSum[i-1]-sufRowSum[i])>100000) continue;
+                    if(prefRowCount.containsKey((int)(prefRowSum[i-1]-sufRowSum[i]))) return true;
+                }
+                else if(prefRowSum[i-1]<sufRowSum[i]){
+                    if((sufRowSum[i]-prefRowSum[i-1])>100000) continue;
+
+                    if(sufRowCount.containsKey((int)(sufRowSum[i]-prefRowSum[i-1]))) return true;
+                }
+                else if(prefRowSum[i-1]==sufRowSum[i]) return true;
+            }
+        }
+
+
+        sufColSum[m-1] = prefColSum[m-1];
+        for(int j = m-2 ; j>-1 ; j--){
+            sufColSum[j] = sufColSum[j+1] + prefColSum[j];
+        }
+
+        for(int j = 1 ; j<m ; j++){
+            for(int i = 0 ; i<n ; i++){
+                prefColCount.put(grid[i][j-1],prefColCount.getOrDefault(grid[i][j-1],0)+1);
+                sufColCount.put(grid[i][j-1],prefColCount.get(grid[i][j-1])-1);
+                if(sufColCount.get(grid[i][j-1])==0) sufColCount.remove(grid[i][j-1]);
+            }
+
+            prefColSum[j] += prefColSum[j-1];
+            if(n==1){
+                if(prefColSum[j-1]>sufColSum[j]){
+                    if((prefColSum[j-1]-sufColSum[j])>100000) continue;
+                    int diff = (int)(prefColSum[j-1]-sufColSum[j]);
+                    if(diff==grid[0][0] || diff==grid[0][j-1]) return true;
+                }
+                else if(prefColSum[j-1]<sufColSum[j]){
+                    if((sufColSum[j]-prefColSum[j-1])>100000) continue;
+                    int diff = (int)(sufColSum[j]-prefColSum[j-1]);
+                    if(diff==grid[0][j] || diff==grid[0][m-1]) return true;
+                }
+                else if(prefColSum[j-1]==sufColSum[j]) return true;
+            }
+            else if(j==1 && j==m-1){
+                if(prefColSum[j-1]>sufColSum[j]){
+                    if((prefColSum[j-1]-sufColSum[j])>100000) continue;
+                    int diff = (int)(prefColSum[j-1]-sufColSum[j]);
+                    if(diff==grid[0][0] || diff==grid[n-1][0]) return true;
+                }
+                else if(prefColSum[j-1]<sufColSum[j]){
+                    if((sufColSum[j]-prefColSum[j-1])>100000) continue;
+                    int diff = (int)(sufColSum[j]-prefColSum[j-1]);
+                    if(diff==grid[0][m-1] || diff==grid[n-1][m-1]) return true;
+                }
+                else if(prefColSum[j-1]==sufColSum[j]) return true;
+            }
+            else if(j==1){
+                if(prefColSum[j-1]>sufColSum[j]){
+                    if((prefColSum[j-1]-sufColSum[j])>100000) continue;
+                    int diff = (int)(prefColSum[j-1]-sufColSum[j]);
+                    if(diff==grid[0][0] || diff==grid[n-1][0]) return true;
+                }
+                else if(prefColSum[j-1]<sufColSum[j]){
+                    if((sufColSum[j]-prefColSum[j-1])>100000) continue;
+                    int diff = (int)(sufColSum[j]-prefColSum[j-1]);
+                    if(sufColCount.containsKey(diff)) return true;
+                }
+                else if(prefColSum[j-1]==sufColSum[j]) return true;
+
+            }
+            else if(j==m-1){
+                if(prefColSum[j-1]>sufColSum[j]){
+                    if((prefColSum[j-1]-sufColSum[j])>100000) continue;
+                    int diff = (int)(prefColSum[j-1]-sufColSum[j]);
+                    if(prefColCount.containsKey(diff)) return true;
+                }
+                else if(prefColSum[j-1]<sufColSum[j]){
+                    if((sufColSum[j]-prefColSum[j-1])>100000) continue;
+                    int diff = (int)(sufColSum[j]-prefColSum[j-1]);
+                    if(diff==grid[0][m-1] || diff==grid[n-1][m-1]) return true;
+                }
+                else if(prefColSum[j-1]==sufColSum[j]) return true;
+            }
+            else{
+                if(prefColSum[j-1]>sufColSum[j]){
+                    if((prefColSum[j-1]-sufColSum[j])>100000) continue;
+
+                    if(prefColCount.containsKey((int)(prefColSum[j-1]-sufColSum[j]))) return true;
+                }
+                else if(prefColSum[j-1]<sufColSum[j]){
+                    if((sufColSum[j]-prefColSum[j-1])>100000) continue;
+
+                    if(sufColCount.containsKey((int)(sufColSum[j]-prefColSum[j-1]))) return true;
+
+                }
+                else if(prefColSum[j-1]==sufColSum[j]) return true;
+            }
+        }
+
+        return false;
+
+
+    }
+}
