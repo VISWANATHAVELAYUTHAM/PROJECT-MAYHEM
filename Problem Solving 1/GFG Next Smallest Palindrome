@@ -1,0 +1,33 @@
+class Solution {
+    static int[] nextPalindrome(int[] num) {
+        int n = num.length, res[] = num.clone(), c = 1, h = (n % 2 == 0) ? (n/2) - 1 : n / 2;
+        mirror(res);
+        if(compare(res, num) > 0) return res;
+        if(res[h] < 9){
+            res[h]++;
+            mirror(res);
+            return res;
+        }
+        while(h >= 0 && c > 0){
+            res[h] += c;
+            c = res[h] / 10;
+            res[h] %= 10;
+            h--;
+        }
+        mirror(res);
+        if(c > 0){
+            int res1[] = new int[n + 1];
+            res1[0] = 1;
+            res1[n] = 1;
+            return res1;
+        }
+        return res;
+    }
+    static int compare(int[] a, int[] b){
+        for(int i=0;i<a.length;i++) if(a[i] != b[i]) return a[i] - b[i];
+        return 0;
+    }
+    static void mirror(int[] a){
+        for(int i=0;i<a.length;i++) a[a.length - i - 1] = a[i];
+    }
+}
