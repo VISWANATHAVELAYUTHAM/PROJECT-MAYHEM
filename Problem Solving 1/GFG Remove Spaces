@@ -1,0 +1,16 @@
+class Solution {
+    public boolean ischar(char ch){
+        return ch>='a' && ch<='z' || ch>='A' && ch<='Z';
+    }
+    String removeSpaces(String s) {
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            char c=s.charAt(i);
+            if(ischar(c)){
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+        
+    }
+}
