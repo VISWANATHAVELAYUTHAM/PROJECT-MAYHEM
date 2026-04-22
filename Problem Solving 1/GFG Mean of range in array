@@ -1,0 +1,13 @@
+class Solution {
+    public ArrayList<Integer> findMean(int[] arr, int[][] queries) {
+        // code here
+        for(int i = 1; i < arr.length; i++)arr[i] += arr[i-1];
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int[] val : queries){
+            int str = val[0];
+            int end = val[1];
+            result.add((arr[end] - (str == 0 ? 0 : arr[str-1])) / (end - str + 1));
+        }
+        return result;
+        
+    }}
