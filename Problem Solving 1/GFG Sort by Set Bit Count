@@ -1,0 +1,14 @@
+class Solution {
+    ArrayList<Integer> sortBySetBitCount(int[] arr) {
+        // Step 1: Convert int[] to Integer[]
+        Integer[] boxed = Arrays.stream(arr).boxed().toArray(Integer[]::new);
+        // Step 2: Sort using Comparator (descending by set bit count)
+        Arrays.sort(boxed, (a, b) -> {
+            int countA = Integer.bitCount(a);
+            int countB = Integer.bitCount(b);
+            return Integer.compare(countB, countA); // descending order
+        });
+        // Step 3: Convert back to ArrayList<Integer>
+        return new ArrayList<>(Arrays.asList(boxed));
+    }
+}
