@@ -1,0 +1,25 @@
+class Solution {
+     public boolean rotateString(String source, String goal) {
+        if(source == null || goal == null || source.isEmpty() || goal.isEmpty() || source.length() != goal.length()) {
+            return false;
+        }
+        boolean isRotated = false;
+        int len = goal.length();
+        char[] charSource = source.toCharArray();
+        char[] charsGoal = goal.toCharArray();
+        for (int i = 0; i < len && !isRotated; i++) {
+            if(charsGoal[i] == charSource[0]) {
+                for (int j = 0; j < len && !isRotated; j++) {
+                    if(charSource[j] != charsGoal[(j+i)%len]) {
+                        break;
+                    }
+                    if (charSource[j] == charsGoal[(j + i) % len] && j == len - 1) {
+                        isRotated = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isRotated;
+    }
+}
