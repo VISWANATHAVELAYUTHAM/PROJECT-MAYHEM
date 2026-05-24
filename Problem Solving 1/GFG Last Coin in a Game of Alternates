@@ -1,0 +1,3 @@
+class Solution:
+    def coin(self, arr):
+        return min(arr)
