@@ -1,0 +1,30 @@
+class Solution {
+    public void verticalSumRec(int vLevel, Map<Integer, Integer> mp, Node root) {
+        // Base Case
+        if(root == null) {
+            return;
+        }
+        
+        mp.put(vLevel, mp.getOrDefault(vLevel, 0) + root.data);
+        
+        // Recursion Call
+        verticalSumRec(vLevel-1, mp, root.left);
+        verticalSumRec(vLevel+1, mp, root.right);
+        
+        return;
+    }
+
+    public ArrayList<Integer> verticalSum(Node root) {
+        Map<Integer, Integer> mp = new TreeMap<>();
+        verticalSumRec(0, mp, root);
+        
+        int size = mp.size();
+        ArrayList<Integer> ans = new ArrayList<>(size);
+        
+        for(Map.Entry<Integer, Integer> entry : mp.entrySet()) {
+            ans.add(entry.getValue());
+        }
+        
+        return ans;
+    }
+}
