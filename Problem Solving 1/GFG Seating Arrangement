@@ -1,0 +1,25 @@
+class Solution {
+    public boolean canSeatAllPeople(int k, int[] seats) {
+        // code here
+        
+         int n=seats.length;
+         
+         for(int i=0;i<n-1;i++){
+             if(seats[i]==1 && seats[i+1]==1) return false;
+         }
+         
+         for(int i=0;i<n;i++){
+             if((i==0 || seats[i-1]!=1) && (i==n-1 || seats[i+1]!=1) && seats[i]==0 && k>0){
+                  k--;
+                  seats[i]=1;
+                 
+             }
+             
+         }
+         
+         if(k==0) return true;
+         return false;
+        
+        
+    }
+}
